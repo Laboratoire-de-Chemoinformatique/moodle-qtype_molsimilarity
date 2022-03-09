@@ -1,0 +1,16 @@
+/*
+ * File style.css
+ * Contains the styling for the molsimilarity plugin.
+ *
+ */
+.que.molsimilarity iframe {
+    width: 50%;
+    height: 550px;
+    border: none;
+    overflow: hidden;
+    position: center;
+}
+
+.que.molsimilarity label {
+    display: inline-flex;
+}

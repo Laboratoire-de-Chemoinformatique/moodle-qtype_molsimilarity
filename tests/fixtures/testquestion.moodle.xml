@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 0  -->
+  <question type="category">
+    <category>
+        <text>$course$/Test questions</text>
+
+    </category>
+  </question>
+
+<!-- question: 110000  -->
+  <question type="molsimilarity">
+    <name>
+      <text>shortanswer-001</text>
+    </name>
+    <questiontext format="html">
+      <text>Draw a molecule of methane.</text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text>Methane is the simplest alkane.</text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <stereobool>0</stereobool>
+    <hidden>0</hidden>
+    <answer fraction="100" format="moodle_auto_format">
+      <text>{"json":"{\"m\":[{\"a\":[{\"x\":255.75,\"y\":141,\"i\":\"a0\"}]}]}","mol_file":"Molecule from ChemDoodle Web Components\n\nhttp://www.ichemlabs.com\n  1  0  0  0  0  0            999 V2000\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0\nM  END"}</text>
+      <feedback format="html">
+        <text>Methane, not methanol.</text>
+      </feedback>
+    </answer>
+  </question>
+
+</quiz>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Fragmentations>
+  <Fragmentation Max="4" Min="2" Atom="A" Bond="B" Cycle="False" DynBnd="0" AtomFrg="False" Extended="NoFX" MarkAtom="0" Topology="I" AtomPairs="False" DoAllWays="False" FuzzyAtom="False" StrictFrg="False" ColorAField="Default" ColorBField="Default" FormalCharge="True" UseRadical="True">xxx.hdr</Fragmentation>
+  <Fragmentation Max="0" Min="0" Atom="NoCA" Bond="NoCB" Cycle="False" DynBnd="0" AtomFrg="False" Extended="NoFX" MarkAtom="0" Topology="E" AtomPairs="False" DoAllWays="False" FuzzyAtom="False" StrictFrg="False" ColorAField="Default" ColorBField="Default" FormalCharge="True" Useradical="True">test.hdr</Fragmentation>
+</Fragmentations>

@@ -1,0 +1,17 @@
+--- chemdoodle/ChemDoodleWeb-9.1.0/src/ChemDoodleWeb-unpacked.js	2021-09-15 11:26:15.288549727 +0200
++++ Chemdoodle/ChemDoodleWeb-unpacked.js	2021-09-24 11:16:31.107000000 +0200
+@@ -14834,11 +14834,12 @@
+ 
+ 	// be careful not to remove this, as this will cause corruption issues
+ 	// contact iChemLabs for instructions to remove this
+-	q(document).ready(function() {
++	// Dev Unistra
++	/*q(document).ready(function() {
+ 		if(c && c.iChemLabs && c.iChemLabs.checkForUpdates){
+ 			c.iChemLabs.checkForUpdates({});
+ 		}
+-	});
++	});*/
+ 
+ 	pack.getRGB = function(color, multiplier) {
+ 		let err = [ 0, 0, 0 ];

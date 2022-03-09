@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="question/type/molsimilarity/db" VERSION="2013070" COMMENT="XMLDB file for Moodle question/type/molsimilarity"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="question_molsimilarity" COMMENT="description of table, e.g. options associated overall question">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="question"/>
+        <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Foreign key references question.id" />
+        <FIELD NAME="stereobool" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether answers are corrected taking in account stereochemistry."/>
+        <FIELD NAME="threshold" TYPE="number" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="5" COMMENT="Threshold under which the grade will be counted as being 0."/>
+        <FIELD NAME="alpha" TYPE="number" LENGTH="10" NOTNULL="true" DEFAULT="1" SEQUENCE="false" DECIMALS="5" COMMENT="Parameter used to modify the notation."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"  />
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
