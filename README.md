@@ -37,7 +37,13 @@ root of your Moodle install:
 
     git clone  question/type/molsimilarity echo '/question/type/molsimilarity' >> .git/info/exclude
 
-### Installation From Downloaded zip file
+### Copyright
 
-Alternatively, download the zip from :
+    Louis Plyer louis.plyer@unistra.fr
+    Gilles Marcou g.marcou@unistra.fr
+    Céline Perves cperves@unistra.fr
+    Rachel Schurhammer rschurhammer@unistra.fr
+    Alexandre Varnek varnek@unistra.fr
+
+
 
