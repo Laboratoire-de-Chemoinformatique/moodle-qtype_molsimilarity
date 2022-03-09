@@ -13,9 +13,6 @@ the stereochemistry will be also taken into account in the grading process, than
 If you wish to launch the given server in local, without modifying the parameters, please use the following command in a shell:
 `./rest_api_multi > /dev/null` (/dev/null to remove the warnings)
 
-// Modify for APACHEIn order to launch the given REST server, please use the following command in a shell:
-`./rest_api_multi > /dev/null` (/dev/null to remove the warnings)
-
 The default port used by the server is 9080. 
 Once installed, the ISIDA Server Url (including port) can be modified in the admin settings page for the call from moodle (Administration of the website -> Plugins -> Question type -> Molsimilarity -> ISIDA Server Url.).
 If modified, the port must be modified on the server side as well, by assigning the port value to the variable `portIsida` in a shell.
