@@ -45,5 +45,7 @@ root of your Moodle install:
     Rachel Schurhammer rschurhammer@unistra.fr
     Alexandre Varnek varnek@unistra.fr
 
+### Licence
 
+    GNU GPL v3 or later, IUPAC/InChI-Trust Licence No.1.0
 
