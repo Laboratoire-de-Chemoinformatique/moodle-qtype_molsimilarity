@@ -12,6 +12,7 @@ the stereochemistry will be also taken into account in the grading process, than
 
 Under Linux please use rest_api_multi, under Windows, please use rest_api_multi.exe
 
+
 If you wish to launch the given server in local, without modifying the parameters, please use the following command in a shell:
 `./rest_api_multi > /dev/null` (/dev/null to remove the warnings)
 
@@ -33,6 +34,14 @@ You can move the location of the Api_server directory, but you shoudn't move the
 ### API code 
 
 If you wish to have access to the uncompiled files of the API, please send an email to Gilles Marcou: g.marcou@unistra.fr
+
+### Copyright
+
+    Louis Plyer louis.plyer@unistra.fr
+    Gilles Marcou g.marcou@unistra.fr
+    Céline Perves cperves@unistra.fr
+    Rachel Schurhammer rschurhammer@unistra.fr
+    Alexandre Varnek varnek@unistra.fr
 
 ### Copyright
 
