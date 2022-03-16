@@ -87,12 +87,6 @@ class qtype_molsimilarity_edit_form extends qtype_shortanswer_edit_form {
 
         $mform->closeHeaderBefore('answerinstruct');
 
-        // To add combined feedback (correct, partial and incorrect).
-        // $this->add_combined_feedback_fields(true); ?
-
-        // Adds hinting features.
-        // $this->add_interactive_settings(true, true); ?
-
         // Add the iframe element which contains the ketcher instance.
         $mform->addElement('html', '<canvas id="sketcher" style="padding-left: 0;padding-right: 0;margin-left: auto;
                 margin-right: auto;display: block;"></canvas>');
@@ -100,7 +94,8 @@ class qtype_molsimilarity_edit_form extends qtype_shortanswer_edit_form {
         $mform->addElement('html', html_writer::empty_tag('br'));
         $answernumber = get_string('answernumber', 'qtype_molsimilarity', '{no}');
 
-        $this->add_per_answer_fields($mform, $answernumber, array('1.0' => '100%', '0.0' => 'None'), $minoptions = 1,
+        $this->add_per_answer_fields($mform, $answernumber, array('1.0' => '100%', '0.0' =>
+                get_string('clearanswer', 'qtype_molsimilarity')), $minoptions = 1,
                 $addoptions = 1); // Grade only needed to be 1, in order to be sure to get the right specific feedback.
     }
 
