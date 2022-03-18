@@ -28,6 +28,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/question/type/questionbase.php');
+require_once($CFG->dirroot . '/question/behaviour/asyncdeferredfeedback/behaviour.php');
 
 /**
  * Represents a molsimilarity question.
@@ -37,12 +38,41 @@ require_once($CFG->dirroot . '/question/type/questionbase.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-class qtype_molsimilarity_question extends question_graded_automatically {
+class qtype_molsimilarity_question extends question_graded_automatically implements question_async_automatically_gradable {
 
     public $stereobool;
     public $alpha;
     public $threshold;
     public $answers = array();
+    /**
+     * @param $CFG
+     * @param $SITE
+     * @param curl $curl
+     * @return void
+     * @throws coding_exception
+     */
+    private static function notify_error(curl $curl, $mailsubject, $errormessage) {
+        global $CFG, $SITE;
+        $eventdata = new \core\message\message();
+        $eventdata->component = 'qtype_molsimilarity';
+        $eventdata->name = 'molsimilarity_down';
+        $eventdata->userfrom = core_user::get_noreply_user();
+        $eventdata->subject = $mailsubject;
+        $eventdata->fullmessageformat = FORMAT_HTML;
+        $eventdata->notification = '1';
+        $eventdata->contexturl = $CFG->wwwroot;
+        $eventdata->contexturlname = $SITE->fullname;
+        $eventdata->replyto = core_user::get_noreply_user()->email;
+        $eventdata->fullmessage = $errormessage;
+        $eventdata->courseid = SITEID;
+        $eventdata->fullmessagehtml = str_replace('\n', '<br/>', $eventdata->fullmessage);
+
+        $recip = get_admins();
+        foreach ($recip as $admin) {
+            $eventdata->userto = $admin;
+            $result = message_send($eventdata);
+        }
+    }
 
     /**
      * What data may be included in the form submission when a student submits
@@ -244,7 +274,7 @@ class qtype_molsimilarity_question extends question_graded_automatically {
         $jsonified = json_encode($singlearray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         // Call to the API.
-        $apiresponse = $this->call_api($jsonified, $token);
+        $apiresponse = self::call_api($jsonified, $token);
 
         // Once the API answers, strip the JSON to get the grade. TODO Check the error num and send it to admin.
         if (!isset(json_decode($apiresponse, true)['student']['grade'])) {
@@ -265,7 +295,7 @@ class qtype_molsimilarity_question extends question_graded_automatically {
      * @return bool|string the grade contained in the json
      * @throws dml_exception
      */
-    public function call_api($jsondata, $token) {
+    public static function call_api($jsondata, $token) {
         global $SITE, $CFG;
         $curl = new curl();
         $isidaurl = get_config('qtype_molsimilarity', 'isidaurl');
@@ -276,52 +306,104 @@ class qtype_molsimilarity_question extends question_graded_automatically {
         $result = $curl->post($isidaurl . "/isida", $jsondata, $option);
         if ($curl->error) {
 
-            // If the server is not responding, we send a Moodle notification to the admins to reboot the api server.
-            $eventdata = new \core\message\message();
-            $eventdata->component = 'qtype_molsimilarity';
-            $eventdata->name = 'molsimilarity_down';
-            $eventdata->userfrom = core_user::get_noreply_user();
-            $eventdata->subject = get_string('mailsubj', 'qtype_molsimilarity');
-            $eventdata->fullmessageformat = FORMAT_HTML;
-            $eventdata->notification = '1';
-            $eventdata->contexturl = $CFG->wwwroot;
-            $eventdata->contexturlname = $SITE->fullname;
-            $eventdata->replyto = core_user::get_noreply_user()->email;
-            $eventdata->fullmessage = get_string('mailmsg', 'qtype_molsimilarity', $curl);
-            $eventdata->courseid = SITEID;
-            $eventdata->fullmessagehtml = str_replace('\n', '<br/>', $eventdata->fullmessage);
-
-            $recip = get_admins();
-            foreach ($recip as $admin) {
-                $eventdata->userto = $admin;
-                $result = message_send($eventdata);
-            }
+            // If there is an error, we send a Moodle notif to the admins to reboot the api server.
+            self::notify_error( $curl, get_string('mailsubj', 'qtype_molsimilarity'),
+                get_string('mailmsg', 'qtype_molsimilarity', $curl));
             return $curl->errno;
-        } else if (isset(json_decode($result, true)['success']) && (json_decode($result, true)['success']) == 'False') {
-            // If there is an unauthorized attempt to access the REST server, we send a Moodle notification to the admins to reboot
-            // the api server.
-            $eventdata = new \core\message\message();
-            $eventdata->component = 'qtype_molsimilarity';
-            $eventdata->name = 'molsimilarity_security';
-            $eventdata->userfrom = core_user::get_noreply_user();
-            $eventdata->subject = get_string('mailsubj_security', 'qtype_molsimilarity');
-            $eventdata->fullmessageformat = FORMAT_HTML;
-            $eventdata->notification = '1';
-            $eventdata->contexturl = $CFG->wwwroot;
-            $eventdata->contexturlname = $SITE->fullname;
-            $eventdata->replyto = core_user::get_noreply_user()->email;
-            $eventdata->fullmessage = get_string('mailmsg_security', 'qtype_molsimilarity', json_decode($result, true)['reason']);
-            $eventdata->courseid = SITEID;
-            $eventdata->fullmessagehtml = str_replace('\n', '<br/>', $eventdata->fullmessage);
-
-            $recip = get_admins();
-            foreach ($recip as $admin) {
-                $eventdata->userto = $admin;
-                $result = message_send($eventdata);
-            }
+        } else if ($curl->get_info()['http_code'] == 401) {
+            self::notify_error( $curl, get_string('mailsubj_security', 'qtype_molsimilarity'),
+                get_string('mailmsg_security', 'qtype_molsimilarity',
+                    json_decode($result, true)['reason']));
+        } else if (isset(json_decode($result, true)['success'])
+            && (json_decode($result, true)['success']) == 'False') {
+            // If there is an error, we send a Moodle notif to the admins to reboot the api server.
+            self::notify_error( $curl, get_string('mailsubj_security', 'qtype_molsimilarity'),
+                get_string('mailmsg_security', 'qtype_molsimilarity',
+                    json_decode($result, true)['reason']));
             return $result;
         } else {
                 return $result;
         }
+    }
+
+    // Implement question_async_automatically_gradable.
+
+    public function make_behaviour(question_attempt $qa, $preferredbehaviour) {
+        if(get_config('qtype_molsimilarity','asyncbehaviour')) {
+            return question_engine::make_behaviour('asyncdeferredfeedback', $qa, $preferredbehaviour);
+        }
+        else return parent::make_behaviour($qa, $preferredbehaviour);
+    }
+
+    public function launch_async_call($qaid, $userid, $answer, $extrainfos) {
+        global $CFG;
+        $curl = new curl();
+        $remoteurl = get_config('qtype_molsimilarity', 'serverurl');
+        $servertoken = get_config('qtype_molsimilarity', 'moodlewstoken');
+        // Create the JSON file to be send to the API.
+        // Prepare the Multidimensional Associative Array.
+        $decodedresponse = json_decode($answer);
+        $singlearray['student'] = array("mol" => $decodedresponse->{"mol_file"});
+        $i = 1;
+        $correction = [];
+        foreach ($this->answers as $ranswer) {
+            $correction["mol_". $i] = json_decode($ranswer->answer)->{"mol_file"};
+            $i++;
+        }
+        $singlearray['correction'] = $correction;
+        $singlearray['stereoopt'] = array("opt" => $this->stereobool);
+        $singlearray['corectopt'] = array("nbmol" => count($this->answers));
+
+        $uniqueid = $qaid . "-" . $this->id; // To have a unique id when we write a file in the API.
+        $singlearray['attemptid'] = array("id" => $uniqueid);
+
+        // Prepare a JWT using the private KEY.
+        $token = self::generate($singlearray, get_config('qtype_molsimilarity', 'isidaKEY'));
+        // Prepare the Json to be given to the API.
+        $jsonified = json_encode($singlearray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $extrainfosarray = json_decode($extrainfos);
+        $extrainfosarray['jsonified'] = $jsonified;
+        $extrainfos = json_encode($extrainfosarray);
+        $postdatas =
+            array(
+                'userid' => $userid,
+                'rightanswers' => json_encode($this->answers),
+                'questionattemptid' => $qaid,
+                'answer' => $answer,
+                'moodleid' => get_config('qtype_molsimilarity', 'moodleid'),
+                'qtype' => 'qtype_molsimilarity',
+                'servertoken' => $servertoken,
+                'extrainfos' => $extrainfos,
+                'token'=> $token,
+                'questionid' => $this->id
+            );
+        if(!empty($CFG->xdebug)){
+            $curl->setopt(array('CURLOPT_COOKIE' => 'XDEBUG_SESSION=PHPSTORM;path=/;'));
+        }
+        $result = $curl->post($remoteurl , $postdatas);
+        $errno = $curl->get_errno();
+        $httpcode = $curl->get_info()['http_code'];
+        if($errno >0){
+            return array(false,$errno, $result);
+        } else if($httpcode === 404) {
+            return array(false, 404, "$remoteurl url not found");
+        }
+        return array($result, null, null);
+    }
+
+    public function is_async_gradable_response(array $submitteddatas) {
+        return array_key_exists('fraction', $submitteddatas);
+    }
+
+    public function async_grade_response($datas) {
+        $grade = $datas['fraction'];
+        if ($grade === false) { // F compare_answer returns false if the server is down => question_state sets to needsgrading.
+            return array($grade, question_state::$needsgrading);
+        } else {
+            return array($grade, question_state::graded_state_for_fraction($grade));
+        }
+    }
+    public function get_extras_infos() {
+        return '';
     }
 }

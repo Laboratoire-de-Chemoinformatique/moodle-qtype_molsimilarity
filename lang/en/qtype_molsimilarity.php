@@ -67,3 +67,14 @@ $string['mailsubj_security'] = 'Unauthorized attempt to connect to molsimilarity
 $string['mailmsg_security'] = 'Someone is trying to access molsimilarity correction server. Answer from the server: {$a}';
 $string['thresholdselection'] = "Please select a value of threshold. The answer is refused below this threshold.";
 $string['alphaselection'] = "Please select a value of alpha value. It will be used to modify the grade accordingly.";
+$string['asyncbehaviour'] = 'Asynchronous Question behaviour activated';
+$string['asyncbehaviour_desc'] = 'molsimilarity question evaluation will be executed asynchronously ';
+$string['serverurl'] = 'Evaluation server URL';
+$string['serverurl_desc'] = 'Evaluation server URL';
+$string['servertoken'] = 'Evaluation server token';
+$string['servertoken_desc'] = 'Evaluation server token (if necessary)';
+$string['moodleid'] = 'Moodle id';
+$string['moodleid_desc'] = 'Unique Moodle id for Evaluation server (if necessary)';
+$string['moodlewstoken'] = 'Moodle token';
+$string['moodlewstoken_desc'] = 'Moodle token associated to async question behaviour (if necessary)';
+

@@ -60,6 +60,37 @@ if ($hassiteconfig) {
     $settings->add(
             new qtype_molsimilarity_test_connection('qtype_molsimilarity/testconnectionout', '', '')
     );
-}
+    // async deferred feedback necessary settings
+    $settings->add(
+        new admin_setting_configcheckbox('qtype_molsimilarity/asyncbehaviour',
+            get_string('asyncbehaviour', 'qtype_molsimilarity'),
+            get_string('asyncbehaviour_desc', 'qtype_molsimilarity'),
+            0
+        )
+    );
+    $settings->add(
+        new admin_setting_configtext('qtype_molsimilarity/serverurl',
+            get_string('serverurl', 'qtype_molsimilarity'),
+            get_string('serverurl_desc', 'qtype_molsimilarity'),
+            $CFG->wwwroot.'/question/type/qtype_molsimilarity/server/async.php')
+    );
+    $settings->add(
+        new admin_setting_configtext('qtype_molsimilarity/servertoken',
+            get_string('servertoken', 'qtype_molsimilarity'),
+            get_string('servertoken_desc', 'qtype_molsimilarity'),
+            '')
+    );
 
+    $settings->add(
+        new admin_setting_configtext('qtype_molsimilarity/moodleid',
+            get_string('moodleid', 'qtype_molsimilarity'),
+            get_string('moodleid_desc', 'qtype_molsimilarity'),1)
+    );
+    $settings->add(
+        new admin_setting_configtext('qtype_molsimilarity/moodlewstoken',
+            get_string('moodlewstoken', 'qtype_molsimilarity'),
+            get_string('moodlewstoken_desc', 'qtype_molsimilarity'),
+            '167d822a2f498261ebc655e6b79839a6')
+    );
+}
 $settings = null; // Prevent Moodle from adding settings block in standard location.
