@@ -72,7 +72,7 @@ if ($hassiteconfig) {
         new admin_setting_configtext('qtype_molsimilarity/serverurl',
             get_string('serverurl', 'qtype_molsimilarity'),
             get_string('serverurl_desc', 'qtype_molsimilarity'),
-            $CFG->wwwroot.'/question/type/qtype_molsimilarity/server/async.php')
+            $CFG->wwwroot.'/question/type/molsimilarity/asyncserver/async.php')
     );
     $settings->add(
         new admin_setting_configtext('qtype_molsimilarity/servertoken',
