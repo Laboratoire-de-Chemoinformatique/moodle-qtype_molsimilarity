@@ -370,12 +370,10 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
                 'rightanswers' => json_encode($this->answers),
                 'questionattemptid' => $qaid,
                 'answer' => $answer,
-                'moodleid' => get_config('qtype_molsimilarity', 'moodleid'),
+                'uuid' => get_config('qtype_molsimilarity', 'moodleid'),
                 'qtype' => 'qtype_molsimilarity',
-                'servertoken' => $servertoken,
+                'token' => $servertoken,
                 'extrainfos' => $extrainfos,
-                'token'=> $token,
-                'questionid' => $this->id
             );
         if(!empty($CFG->xdebug)){
             $curl->setopt(array('CURLOPT_COOKIE' => 'XDEBUG_SESSION=PHPSTORM;path=/;'));

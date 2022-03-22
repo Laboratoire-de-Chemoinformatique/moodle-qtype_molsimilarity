@@ -6,7 +6,6 @@ require_once($CFG->libdir.'/filelib.php');;
 require_once($CFG->dirroot.'/question/type/molsimilarity/question.php');
 
 
-$questionid = required_param('questionid', PARAM_INT);
 $questionattemptid = required_param('questionattemptid', PARAM_INT);
 $userid = required_param('userid', PARAM_INT);
 $answer = required_param('answer', PARAM_TEXT);
