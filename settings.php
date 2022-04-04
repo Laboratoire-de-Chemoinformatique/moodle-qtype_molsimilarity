@@ -69,6 +69,13 @@ if ($hassiteconfig) {
         )
     );
     $settings->add(
+        new admin_setting_configcheckbox('qtype_molsimilarity/asyncjwtenabled',
+            get_string('asyncjwtenabled', 'qtype_molsimilarity'),
+            get_string('asyncjwtenabled_desc', 'qtype_molsimilarity'),
+            0
+        )
+    );
+    $settings->add(
         new admin_setting_configtext('qtype_molsimilarity/serverurl',
             get_string('serverurl', 'qtype_molsimilarity'),
             get_string('serverurl_desc', 'qtype_molsimilarity'),

@@ -77,4 +77,6 @@ $string['moodleid'] = 'Moodle id';
 $string['moodleid_desc'] = 'Unique Moodle id for Evaluation server (if necessary)';
 $string['moodlewstoken'] = 'Moodle token';
 $string['moodlewstoken_desc'] = 'Moodle token associated to async question behaviour (if necessary)';
+$string['asyncjwtenabled'] = 'JWT taken in charge by remote isida server';
+$string['asyncjwtenabled_desc'] = 'Strongly recommended excpet in Rabbit/Docker architecture.';
 

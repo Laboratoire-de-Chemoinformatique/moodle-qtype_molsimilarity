@@ -295,17 +295,19 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
      * @return bool|string the grade contained in the json
      * @throws dml_exception
      */
-    public static function call_api($jsondata, $token) {
+    public static function call_api($jsondata, $token, $jwtenabled = true) {
         global $SITE, $CFG;
         $curl = new curl();
         $isidaurl = get_config('qtype_molsimilarity', 'isidaurl');
-        $option = array(
+        $option = array();
+        if ($jwtenabled) {
+            $option = array(
                 'returntransfer' => true,
                 'httpheader' => array("Authorization: Bearer " . $token)
-        );
+            );
+        }
         $result = $curl->post($isidaurl . "/isida", $jsondata, $option);
         if ($curl->error) {
-
             // If there is an error, we send a Moodle notif to the admins to reboot the api server.
             self::notify_error( $curl, get_string('mailsubj', 'qtype_molsimilarity'),
                 get_string('mailmsg', 'qtype_molsimilarity', $curl));
@@ -356,14 +358,11 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
 
         $uniqueid = $qaid . "-" . $this->id; // To have a unique id when we write a file in the API.
         $singlearray['attemptid'] = array("id" => $uniqueid);
-
-        // Prepare a JWT using the private KEY.
-        $token = self::generate($singlearray, get_config('qtype_molsimilarity', 'isidaKEY'));
-        // Prepare the Json to be given to the API.
-        $jsonified = json_encode($singlearray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        $extrainfosarray = json_decode($extrainfos);
-        $extrainfosarray['jsonified'] = $jsonified;
-        $extrainfos = json_encode($extrainfosarray);
+        $singlearray = array_merge($singlearray,empty($extrainfos) ? array() : $extrainfos);
+        if(get_config('qtype_molsimilarity', 'asyncjwtenabled')) {
+            // Prepare a JWT using the private KEY.
+            $isidajwttoken = self::generate($singlearray, get_config('qtype_molsimilarity', 'isidaKEY'));
+        }
         $postdatas =
             array(
                 'userid' => $userid,
@@ -372,9 +371,14 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
                 'answer' => $answer,
                 'uuid' => get_config('qtype_molsimilarity', 'moodleid'),
                 'qtype' => 'qtype_molsimilarity',
-                'token' => $servertoken,
-                'extrainfos' => $extrainfos,
+                'servertoken' => $servertoken,
+                'extrainfos' => json_encode($singlearray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
             );
+        if(get_config('qtype_molsimilarity', 'asyncjwtenabled')) {
+            $postdatas['isidajwttoken'] = $isidajwttoken;
+        }
+
+        // For debug use
         if(!empty($CFG->xdebug)){
             $curl->setopt(array('CURLOPT_COOKIE' => 'XDEBUG_SESSION=PHPSTORM;path=/;'));
         }

@@ -10,7 +10,7 @@ $questionattemptid = required_param('questionattemptid', PARAM_INT);
 $userid = required_param('userid', PARAM_INT);
 $answer = required_param('answer', PARAM_TEXT);
 $extrainfos = required_param('extrainfos', PARAM_TEXT);
-$token = required_param('token', PARAM_TEXT);
+$isidajwttoken = optional_param('isidajwttoken', null, PARAM_TEXT);
 // rightanswers not necessary here since included in jsonified
 $rightanswers = required_param('rightanswers', PARAM_TEXT);
 // No need to use moodleid in that context, moodleid is for remote server that work for various moodle
@@ -18,11 +18,8 @@ $rightanswers = required_param('rightanswers', PARAM_TEXT);
 $moodletoken = get_config('qtype_molsimilarity', 'moodlewstoken');
 
 // Call isida
-$extrainfosarr = (array)json_decode($extrainfos);
-$jsonified = $extrainfosarr['jsonified'];
-unset($extrainfosarr['jsonified']);
-$extrainfos = json_encode($extrainfosarr);
-$apiresponse = qtype_molsimilarity_question::call_api($jsonified, $token);
+$apiresponse = qtype_molsimilarity_question::call_api($extrainfos, $isidajwttoken,
+    get_config('qtype_molsimilarity','asyncjwtenabled'));
 $grade = -1;
 if (array_key_exists('grade', json_decode($apiresponse, true)['student'])) {
     $grade = json_decode($apiresponse, true)['student']['grade'];
@@ -42,7 +39,8 @@ if($grade != -1){
         'userid' => $userid,
         'fraction' => $grade,
         'answer' => urlencode($answer),
-        'extrainfos' => $extrainfos
+        'extrainfos' => array()
+        // Here extrainfos is for externallib error use urlencode('{"errorcode":42, "errormessage":"answer to question"}')
     );
     $request = "$CFG->wwwroot/webservice/rest/server.php?";
     $i=0;
