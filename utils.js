@@ -16,7 +16,7 @@
  */
 function ajax_call (molfile, json_data, location_isida, dirroot) {
     let request;
-    console.log(molfile);
+    //console.log(molfile);
     if (request){
         request.abort();
     }
@@ -38,15 +38,15 @@ function ajax_call (molfile, json_data, location_isida, dirroot) {
         }])
     })
     .done(function (response) {
-        console.log('Correction ongoing.');
+        //console.log('Correction ongoing.');
         get_data_mol = response[0].data.mol_file;
         get_data_json = response[0].data.json;
         // console.log(get_data);
         // console.log(response.json);
         //$(location_isida).val(JSON.stringify(get_data));
         $(location_isida).val(JSON.stringify(response[0].data));
-        console.log(response[0].data.mol_file);
-        console.log($(location_isida).val());
+        //console.log(response[0].data.mol_file);
+        //console.log($(location_isida).val());
     })
     .fail(function (response){
         console.error('The following error occurred : %o', response);
