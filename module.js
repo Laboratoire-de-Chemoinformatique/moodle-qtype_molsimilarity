@@ -31,21 +31,15 @@ M.qtype_molsimilarity={
         let location_isida = '#' + inputname;
 
         function style () {
-        ChemDoodle.DEFAULT_STYLES.bondLength_2D = 14.4;
-        ChemDoodle.DEFAULT_STYLES.bonds_width_2D = .6;
-        ChemDoodle.DEFAULT_STYLES.bonds_saturationWidthAbs_2D = 2.6;
-        ChemDoodle.DEFAULT_STYLES.bonds_hashSpacing_2D = 2.5;
-        ChemDoodle.DEFAULT_STYLES.atoms_font_size_2D = 10;
-        ChemDoodle.DEFAULT_STYLES.atoms_font_families_2D = ["Helvetica", "Arial", "sans-serif"];
-        ChemDoodle.DEFAULT_STYLES.atoms_displayTerminalCarbonLabels_2D = true;
-        ChemDoodle.DEFAULT_STYLES.atoms_useJMOLColors = true;
+        window[name].styles.atoms_useJMOLColors = true;
+        window[name].styles.bonds_clearOverlaps_2D = true;
         ChemDoodle.ELEMENT['H'].jmolColor = 'black';
         ChemDoodle.ELEMENT['S'].jmolColor = '#B9A130';
-        window[name].styles.bonds_clearOverlaps_2D = true;
         }
 
         if (readonly){
             window[name] = new ChemDoodle.ViewerCanvas(toreplaceid, 400, 300);
+
             window[name].emptyMessage = 'No data loaded';
             style();
         }
@@ -53,6 +47,10 @@ M.qtype_molsimilarity={
         else{
             window[name] = new ChemDoodle.SketcherCanvas(toreplaceid, 550, 300, {useServices:false, oneMolecule:true});
             style();
+
+            let half_bond = document.getElementById(toreplaceid + '_button_bond_half_label');
+            half_bond.remove(); // Removing the "halfbond".
+
             let initmol = ChemDoodle.readJSON("{\"m\":[{\"a\":[]}]}");
             let meth = ChemDoodle.readJSON("{\"m\":[{\"a\":[{\"x\":236.75,\"y\":134,\"i\":\"a0\"}]}]}");
 
@@ -62,21 +60,9 @@ M.qtype_molsimilarity={
             function initcanvas(){
                 let json_data = JSON.stringify(new ChemDoodle.io.JSONInterpreter().contentTo(window[name].molecules));
                 if (json_data === '{\"m\":[{\"a\":[]}]}') {
-                    //console.log('canvas empty');
                     window[name].loadMolecule(meth['molecules'][0]);
                 }
             }
-
-            /**
-            $(document).on('submit', '#responseform', function() { // error here
-                let json_data = JSON.stringify(new ChemDoodle.io.JSONInterpreter().contentTo(window[name].molecules));
-                // We check if the answer is not the "empty" molecule used to instantiate the ketcher.
-                if (json_data !== '{\"m\":[{\"a\":[]}]}') {
-                    let mol = ChemDoodle.writeMOL(window[name].getMolecule());
-                    ajax_call(mol, json_data, location_isida, dirr);
-                }
-                return true;
-            });*/
 
             const moodleform = document.getElementById("responseform");
             moodleform.addEventListener("submit", function (event) {
@@ -90,7 +76,7 @@ M.qtype_molsimilarity={
             });
         }
         let lastmol = document.getElementById(inputname).value;
-        //console.log(JSON.parse(lastmol).json);
+
         if(lastmol.length > 0) {
             let cmcmol = ChemDoodle.readJSON(JSON.parse(lastmol).json);
             window[name].loadMolecule(cmcmol['molecules'][0]);
@@ -176,8 +162,12 @@ M.qtype_molsimilarity={
             let id = 'sketcher_preview';
             id += i;
             sketcherlist[i].id = id;
+
             window[id] = new ChemDoodle.ViewerCanvas(id, 100, 100);
+
             window[id].emptyMessage = 'No data loaded';
+            window[id].styles.atoms_useJMOLColors = true;
+            window[id].styles.bonds_clearOverlaps_2D = true;
 
             // Locate the area of the answer.
             let parent = $(sketcherlist[i].parentNode.parentNode.parentNode);
@@ -206,9 +196,13 @@ M.qtype_molsimilarity={
     },
     insert_good_answer : function (Y, toreplaceid, name, correct_data) {
         window[name] = new ChemDoodle.ViewerCanvas(toreplaceid, 400, 300);
+
         window[name].emptyMessage = 'No data loaded';
+        window[name].styles.atoms_useJMOLColors = true;
+        window[name].styles.bonds_clearOverlaps_2D = true;
+
         let correct_mol = correct_data;
-        console.log(correct_mol);
+
         if (correct_mol.length > 0) {
             let cmcmol = ChemDoodle.readJSON(correct_mol);
             window[name].loadMolecule(cmcmol['molecules'][0]);
