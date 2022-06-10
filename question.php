@@ -249,83 +249,87 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
     public function compare_mol ($response) {
         // Create the JSON file to be send to the API.
         // Prepare the Multidimensional Associative Array.
-        $singlearray['student'] = array("mol" => $response);
-        $i = 1;
-        $correction = [];
-        foreach ($this->answers as $answer) {
-            $correction["mol_". $i] = json_decode($answer->answer)->{"mol_file"};
-            $i++;
-        }
-        $singlearray['correction'] = $correction;
-        $singlearray['stereoopt'] = array("opt" => $this->stereobool);
-        $singlearray['corectopt'] = array("nbmol" => count($this->answers));
-        try {
-            $attemptid = required_param('attempt', PARAM_INT);
-        } catch (Exception $exception) {  // Used for overview mode.
-            $attemptid = random_int(1, 100);
-        }
-
-        $uniqueid = $attemptid . "-" . $this->id; // To have a unique id when we write a file in the API.
-        $singlearray['attemptid'] = array("id" => $uniqueid);
-
-        // Prepare a JWT using the private KEY.
-        $token = self::generate($singlearray, get_config('qtype_molsimilarity', 'isidaKEY'));
-        // Prepare the Json to be given to the API.
-        $jsonified = json_encode($singlearray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        list($correction, $token, $jsonified) = $this->prepare_isida_json($response);
 
         // Call to the API.
-        $apiresponse = self::call_api($jsonified, $token);
-
+        list($apiresponse,$errorcode, $httpcode) = self::call_api($response, $correction, $jsonified, $token,
+            get_config('qtype_molsimilarity', 'jwtenabled'), true);
         // Once the API answers, strip the JSON to get the grade. TODO Check the error num and send it to admin.
-        if (!isset(json_decode($apiresponse, true)['student']['grade'])) {
-            return false;
+        $grade = false;
+        if(get_config('qtype_molsimilarity', 'dispatchermode')){
+            $grade = json_decode($apiresponse, true)['score'];
         } else {
-            $grade = json_decode($apiresponse, true)['student']['grade'];
-            if (gettype($grade) == "integer" || "double") {
-                return $grade;
-            } else {
+            if (!isset(json_decode($apiresponse, true)['student']['grade'])) {
                 return false;
+            } else {
+                $grade = json_decode($apiresponse, true)['student']['grade'];
             }
+        }
+        if (gettype($grade) == "integer" || "double") {
+            return $grade;
+        } else {
+            return false;
         }
     }
 
     /**
-     * @param $jsondata false|string containing the student, correction and stereo information.
+     * @param $jsondatastring false|string containing the student, correction and stereo information.
      * @param $token string containing the JWT token to identify the connection to the API
      * @return bool|string the grade contained in the json
      * @throws dml_exception
      */
-    public static function call_api($jsondata, $token, $jwtenabled = true) {
-        global $SITE, $CFG;
+    public static function call_api($answer, $rightanswers, $jsondatastring, $token, $jwtenabled, $issync=true,  $userid = -1, $qaid = -1) {
+        $dispatchermode = get_config('qtype_molsimilarity', 'dispatchermode');
         $curl = new curl();
-        $isidaurl = get_config('qtype_molsimilarity', 'isidaurl');
+        $serverurl = ($dispatchermode ?
+            get_config('qtype_molsimilarity', 'serverurl')
+            : get_config('qtype_molsimilarity', 'isidaurl').'/isida');
         $option = array();
-        if ($jwtenabled) {
-            $option = array(
-                'returntransfer' => true,
-                'httpheader' => array("Authorization: Bearer " . $token)
+        $postdatas = null;
+        if ($dispatchermode) {
+            $jsondata = json_decode($jsondatastring);
+            $jsondata->is_sync = $issync;
+            $jsondatastring = json_encode($jsondata);
+            if($issync)
+            $postdatas = array(
+                'userid' => $userid,
+                'rightanswers' => json_encode($rightanswers),
+                'questionattemptid' => $qaid,
+                'answer' => $answer,
+                'uuid' => get_config('qtype_similartext', 'moodleid'),
+                'qtype' => 'qtype_similartext',
+                'token' => get_config('qtype_molsimilarity', 'moodlewstoken'),
+                'extrainfos' => $jsondatastring
             );
+        } else {
+            if ($jwtenabled) {
+                $option = array(
+                    'returntransfer' => true,
+                    'httpheader' => array("Authorization: Bearer " . $token)
+                );
+            }
+            $postdatas = $jsondatastring;
         }
-        $result = $curl->post($isidaurl . "/isida", $jsondata, $option);
+        if(!empty($CFG->xdebug)){
+            $curl->setopt(array('CURLOPT_COOKIE' => 'XDEBUG_SESSION=PHPSTORM;path=/;'));
+        }
+        $result = $curl->post($serverurl, $postdatas, $option);
         if ($curl->error) {
             // If there is an error, we send a Moodle notif to the admins to reboot the api server.
             self::notify_error( $curl, get_string('mailsubj', 'qtype_molsimilarity'),
                 get_string('mailmsg', 'qtype_molsimilarity', $curl));
-            return $curl->errno;
-        } else if ($curl->get_info()['http_code'] == 401) {
+        } else if ($curl->get_info()['http_code'] != 201) {
             self::notify_error( $curl, get_string('mailsubj_security', 'qtype_molsimilarity'),
                 get_string('mailmsg_security', 'qtype_molsimilarity',
-                    json_decode($result, true)['reason']));
+                    $result));
         } else if (isset(json_decode($result, true)['success'])
             && (json_decode($result, true)['success']) == 'False') {
             // If there is an error, we send a Moodle notif to the admins to reboot the api server.
             self::notify_error( $curl, get_string('mailsubj_security', 'qtype_molsimilarity'),
                 get_string('mailmsg_security', 'qtype_molsimilarity',
-                    json_decode($result, true)['reason']));
-            return $result;
-        } else {
-                return $result;
+                    $result));
         }
+        return array ($result, $curl->get_errno(), $curl->get_info()['http_code']);
     }
 
     // Implement question_async_automatically_gradable.
@@ -338,57 +342,19 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
     }
 
     public function launch_async_call($qaid, $userid, $answer, $extrainfos) {
-        global $CFG;
-        $curl = new curl();
-        $remoteurl = get_config('qtype_molsimilarity', 'serverurl');
-        $servertoken = get_config('qtype_molsimilarity', 'moodlewstoken');
-        // Create the JSON file to be send to the API.
-        // Prepare the Multidimensional Associative Array.
-        $decodedresponse = json_decode($answer);
-        $singlearray['student'] = array("mol" => $decodedresponse->{"mol_file"});
-        $i = 1;
-        $correction = [];
-        foreach ($this->answers as $ranswer) {
-            $correction["mol_". $i] = json_decode($ranswer->answer)->{"mol_file"};
-            $i++;
+        $rightanswers = array();
+        foreach ($this->answers as $rightanswer) {
+            $rightanswers[] = $rightanswer->answer;
         }
-        $singlearray['correction'] = $correction;
-        $singlearray['stereoopt'] = array("opt" => $this->stereobool);
-        $singlearray['corectopt'] = array("nbmol" => count($this->answers));
-
-        $uniqueid = $qaid . "-" . $this->id; // To have a unique id when we write a file in the API.
-        $singlearray['attemptid'] = array("id" => $uniqueid);
-        $singlearray = array_merge($singlearray,empty($extrainfos) ? array() : $extrainfos);
-        if(get_config('qtype_molsimilarity', 'asyncjwtenabled')) {
-            // Prepare a JWT using the private KEY.
-            $isidajwttoken = self::generate($singlearray, get_config('qtype_molsimilarity', 'isidaKEY'));
-        }
-        $postdatas =
-            array(
-                'userid' => $userid,
-                'rightanswers' => json_encode($this->answers),
-                'questionattemptid' => $qaid,
-                'answer' => $answer,
-                'uuid' => get_config('qtype_molsimilarity', 'moodleid'),
-                'qtype' => 'qtype_molsimilarity',
-                'servertoken' => $servertoken,
-                'extrainfos' => json_encode($singlearray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
-            );
-        if(get_config('qtype_molsimilarity', 'asyncjwtenabled')) {
-            $postdatas['isidajwttoken'] = $isidajwttoken;
-        }
-
-        // For debug use
-        if(!empty($CFG->xdebug)){
-            $curl->setopt(array('CURLOPT_COOKIE' => 'XDEBUG_SESSION=PHPSTORM;path=/;'));
-        }
-        $result = $curl->post($remoteurl , $postdatas);
-        $errno = $curl->get_errno();
-        $httpcode = $curl->get_info()['http_code'];
+        list($correction, $token, $jsonified) = $this->prepare_isida_json($answer);
+        $extrainfos['is_sync'] = false;
+        list($result,$errno, $httpcode) =
+            self::call_api($answer, $correction, $jsonified, $token,get_config('qtype_molsimilarity', 'jwtenabled'),
+                false, $userid, $qaid);
         if($errno >0){
             return array(false,$errno, $result);
         } else if($httpcode === 404) {
-            return array(false, 404, "$remoteurl url not found");
+            return array(false, 404, "url not found");
         }
         return array($result, null, null);
     }
@@ -407,5 +373,37 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
     }
     public function get_extras_infos() {
         return '';
+    }
+
+    /**
+     * @param $response
+     * @return array
+     * @throws dml_exception
+     */
+    private function prepare_isida_json($response): array {
+        $singlearray['student'] = array("mol" => $response);
+        $i = 1;
+        $correction = [];
+        foreach ($this->answers as $answer) {
+            $correction["mol_" . $i] = json_decode($answer->answer)->{"mol_file"};
+            $i++;
+        }
+        $singlearray['correction'] = $correction;
+        $singlearray['stereoopt'] = array("opt" => $this->stereobool);
+        $singlearray['corectopt'] = array("nbmol" => count($this->answers));
+        try {
+            $attemptid = required_param('attempt', PARAM_INT);
+        } catch (Exception $exception) {  // Used for overview mode.
+            $attemptid = random_int(1, 100);
+        }
+
+        $uniqueid = $attemptid . "-" . $this->id; // To have a unique id when we write a file in the API.
+        $singlearray['attemptid'] = array("id" => $uniqueid);
+
+        // Prepare a JWT using the private KEY.
+        $token = self::generate($singlearray, get_config('qtype_molsimilarity', 'isidaKEY'));
+        // Prepare the Json to be given to the API.
+        $jsonified = json_encode($singlearray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        return array($correction, $token, $jsonified);
     }
 }

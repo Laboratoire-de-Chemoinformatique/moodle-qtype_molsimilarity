@@ -79,6 +79,10 @@ $string['moodleid'] = 'Moodle id';
 $string['moodleid_desc'] = 'Unique Moodle id for Evaluation server (if necessary)';
 $string['moodlewstoken'] = 'Moodle token';
 $string['moodlewstoken_desc'] = 'Moodle token associated to async question behaviour (if necessary)';
-$string['asyncjwtenabled'] = 'JWT taken in charge by remote isida server';
-$string['asyncjwtenabled_desc'] = 'Strongly recommended excpet in Rabbit/Docker architecture.';
+$string['jwtenabled'] = 'JWT taken in charge by remote isida server';
+$string['jwtenabled_desc'] = 'Strongly recommended excpet in Rabbit/Docker architecture.';
+$string['dispatchersettings'] = 'Dispatcher settings';
+$string['dispatchersettings_desc'] = 'Dispatcher server will serve the question attempts to the evaluation server through a rabbit/docker architecture';
+$string['dispatchermode'] = 'Dispatcher mode';
+$string['dispatchermode_desc'] = 'The question attempt will pass trhough a dispatcher not directly to isida server';
 

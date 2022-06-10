@@ -18,8 +18,8 @@ $rightanswers = required_param('rightanswers', PARAM_TEXT);
 $moodletoken = get_config('qtype_molsimilarity', 'moodlewstoken');
 
 // Call isida
-$apiresponse = qtype_molsimilarity_question::call_api($extrainfos, $isidajwttoken,
-    get_config('qtype_molsimilarity','asyncjwtenabled'));
+list($apiresponse,$errorcode, $httpcode) = qtype_molsimilarity_question::call_api($answer, $rightanswers, $extrainfos, $isidajwttoken,
+    get_config('qtype_molsimilarity','jwtenabled'), get_config('qtype_molsimilarity', 'asyncbehaviour'), $userid, $questionattemptid);
 $grade = -1;
 if (array_key_exists('grade', json_decode($apiresponse, true)['student'])) {
     $grade = json_decode($apiresponse, true)['student']['grade'];

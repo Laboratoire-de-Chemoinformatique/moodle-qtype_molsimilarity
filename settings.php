@@ -52,6 +52,13 @@ if ($hassiteconfig) {
                     'localhost:9080')
     );
     $settings->add(
+        new admin_setting_configcheckbox('qtype_molsimilarity/jwtenabled',
+            get_string('jwtenabled', 'qtype_molsimilarity'),
+            get_string('jwtenabled_desc', 'qtype_molsimilarity'),
+            0
+        )
+    );
+    $settings->add(
             new admin_setting_configtext('qtype_molsimilarity/isidaKEY',
                     get_string('isidaKEY', 'qtype_molsimilarity'),
                     get_string('isidaKEY_desc', 'qtype_molsimilarity'),
@@ -60,18 +67,14 @@ if ($hassiteconfig) {
     $settings->add(
             new qtype_molsimilarity_test_connection('qtype_molsimilarity/testconnectionout', '', '')
     );
-    // async deferred feedback necessary settings
     $settings->add(
-        new admin_setting_configcheckbox('qtype_molsimilarity/asyncbehaviour',
-            get_string('asyncbehaviour', 'qtype_molsimilarity'),
-            get_string('asyncbehaviour_desc', 'qtype_molsimilarity'),
-            0
-        )
-    );
+        new admin_setting_heading('dispatchersettings',
+            get_string('dispatchersettings', 'qtype_molsimilarity'),
+            get_string('dispatchersettings_desc', 'qtype_molsimilarity')));
     $settings->add(
-        new admin_setting_configcheckbox('qtype_molsimilarity/asyncjwtenabled',
-            get_string('asyncjwtenabled', 'qtype_molsimilarity'),
-            get_string('asyncjwtenabled_desc', 'qtype_molsimilarity'),
+        new admin_setting_configcheckbox('qtype_molsimilarity/dispatchermode',
+            get_string('dispatchermode', 'qtype_molsimilarity'),
+            get_string('dispatchermode_desc', 'qtype_molsimilarity'),
             0
         )
     );
@@ -87,17 +90,24 @@ if ($hassiteconfig) {
             get_string('servertoken_desc', 'qtype_molsimilarity'),
             '')
     );
-
-    $settings->add(
-        new admin_setting_configtext('qtype_molsimilarity/moodleid',
-            get_string('moodleid', 'qtype_molsimilarity'),
-            get_string('moodleid_desc', 'qtype_molsimilarity'),1)
-    );
     $settings->add(
         new admin_setting_configtext('qtype_molsimilarity/moodlewstoken',
             get_string('moodlewstoken', 'qtype_molsimilarity'),
             get_string('moodlewstoken_desc', 'qtype_molsimilarity'),
             '167d822a2f498261ebc655e6b79839a6')
+    );
+    $settings->add(
+        new admin_setting_configtext('qtype_molsimilarity/moodleid',
+            get_string('moodleid', 'qtype_molsimilarity'),
+            get_string('moodleid_desc', 'qtype_molsimilarity'),1)
+    );
+    // async deferred feedback necessary settings
+    $settings->add(
+        new admin_setting_configcheckbox('qtype_molsimilarity/asyncbehaviour',
+            get_string('asyncbehaviour', 'qtype_molsimilarity'),
+            get_string('asyncbehaviour_desc', 'qtype_molsimilarity'),
+            0
+        )
     );
 }
 $settings = null; // Prevent Moodle from adding settings block in standard location.
