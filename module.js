@@ -114,14 +114,15 @@ M.qtype_molsimilarity={
 
             let half_bond = document.getElementById('sketcher_button_bond_half_label');
             half_bond.remove(); // removing the "halfbond"
-        
+
             $().ready(function () {$('[classo=load-molfile]').first().trigger("click")});
+
             function get_source (parent) {
-                let buttonname = parent.attr('name');
-                let textfieldid = 'id_answer_' + buttonname.substr(buttonname.length - 2, 1);
-                let source = $(`#${textfieldid}`);
-                return source;
-            }
+                    let buttonname = parent.attr('name');
+                    let textfieldid = 'id_answer_' + buttonname.substr(buttonname.length - 2, 1);
+                    let source = $(`#${textfieldid}`);
+                    return source;
+                }
 
             $('[classo=set-molfile]').click(function () {
                 let dirr = JSON.parse(dirroot).dirrMoodle;
@@ -129,7 +130,6 @@ M.qtype_molsimilarity={
                 let molfile = ChemDoodle.writeMOL(sketcher.getMolecule());
                 let json_data = JSON.stringify(new ChemDoodle.io.JSONInterpreter().contentTo(sketcher.molecules));
                 let box = get_source(parent);
-                console.log(box);
                 ajax_call(molfile, json_data, box, dirr);
                 if (box.val().length >= 1) {$('[classo = mol_empty]').hide();}
             });
@@ -155,6 +155,55 @@ M.qtype_molsimilarity={
                     $('[id^="fitem_id_feedback_"]:not(:first)').css('display','none'); // Because we only need the first specific feedback
                 });
         },
+    insert_form_preview: function(Y) {
+
+        function get_source_preview (parent) {
+            let groupname = parent.attr('data-groupname');
+            let textfieldid = 'id_answer_' + groupname.substr(groupname.length - 2, 1);
+            let source = $(`#${textfieldid}`);
+            return source;
+        }
+
+        // NodeList created.
+        let sketcherlist = document.getElementsByName('test_preview');
+        let listlength = sketcherlist.length;
+
+        // Loop and initialize Ketchers, add 'eventlisteners'.
+
+        for (let i = 0; i < listlength; ++i) {
+
+            // Change the id of the canvas initiated by Moodle.
+            let id = 'sketcher_preview';
+            id += i;
+            sketcherlist[i].id = id;
+            window[id] = new ChemDoodle.ViewerCanvas(id, 100, 100);
+            window[id].emptyMessage = 'No data loaded';
+
+            // Locate the area of the answer.
+            let parent = $(sketcherlist[i].parentNode.parentNode.parentNode);
+            let box = get_source_preview(parent);
+
+            // We initiate the viewer canvas with a value.
+            if (box.val()) {
+                let val = JSON.parse(box.val());
+                let data = ChemDoodle.readJSON(val.json);
+                window[id].loadMolecule(data['molecules'][0]);
+            }
+            let boxval = box.val();
+
+            // Loop each 5s and update the preview if the answer was modified.
+            setInterval(function () {
+                if (box.val()){
+                    if (boxval !== box.val() ) {
+                        boxval = box.val();
+                        let val = JSON.parse(box.val());
+                        let data = ChemDoodle.readJSON(val.json);
+                        window[id].loadMolecule(data['molecules'][0]);
+                    }
+                }
+            }, 5000)
+        }
+    },
     insert_good_answer : function (Y, toreplaceid, name, correct_data) {
         window[name] = new ChemDoodle.ViewerCanvas(toreplaceid, 400, 300);
         window[name].emptyMessage = 'No data loaded';

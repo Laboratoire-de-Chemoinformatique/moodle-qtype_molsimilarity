@@ -47,6 +47,7 @@ class qtype_molsimilarity_edit_form extends qtype_shortanswer_edit_form {
         $PAGE->requires->css("/question/type/molsimilarity/Chemdoodle/uis/jquery-ui-1.11.4.css");
         $PAGE->requires->js("/question/type/molsimilarity/Chemdoodle/ChemDoodleWeb-simple.js", true);
         $PAGE->requires->js("/question/type/molsimilarity/Chemdoodle/uis/ChemDoodleWeb-uis-simple.js", true);
+        $PAGE->requires->js("/question/type/molsimilarity/javascript/jquery-1.11.3.min.js", true);
         $PAGE->requires->js("/question/type/molsimilarity/utils.js");
 
         $menustereo = array(
@@ -72,10 +73,12 @@ class qtype_molsimilarity_edit_form extends qtype_shortanswer_edit_form {
                 '0.1000000' => '0,1');
 
         $mform->addElement('select', 'threshold',
-                get_string('thresholdselection', 'qtype_molsimilarity'), $menuthreshold);
+                get_string('threshold', 'qtype_molsimilarity'), $menuthreshold);
+        $mform->addHelpButton('threshold', 'threshold', 'qtype_molsimilarity');
 
         $mform->addElement('select', 'alpha',
                 get_string('alphaselection', 'qtype_molsimilarity'), $menualpha);
+        $mform->addHelpButton('alpha', 'alphaselection', 'qtype_molsimilarity');
 
         $mform->addElement('select', 'stereobool',
                 get_string('stereoselection', 'qtype_molsimilarity'), $menustereo);
@@ -114,17 +117,36 @@ class qtype_molsimilarity_edit_form extends qtype_shortanswer_edit_form {
                 $jsmodule);
     }
 
+    protected function require_js_preview() {
+        global $PAGE, $CFG;
+        $jsmodule = array(
+                'name'     => 'qtype_molsimilarity',
+                'fullpath' => '/question/type/molsimilarity/module.js',
+                'requires' => array(),
+                'strings' => array()
+        );
+        $PAGE->requires->js_init_call('M.qtype_molsimilarity.insert_form_preview',
+                null,
+                true,
+                $jsmodule);
+    }
     protected function get_per_answer_fields($mform, $label, $gradeoptions, &$repeatedoptions, &$answersoption): array {
+        global $CFG;
         $repeated = array();
         $answeroptions = array();
+        $previewgroup = array();
         $insertchamp = array();
         $answeroptions[] = $mform->createElement('textarea', 'answer',
                 $label, array('row' => 1, 'style' => 'display: none;'));
         $answeroptions[] = $mform->createElement('select', 'fraction',
                 get_string('grade'), $gradeoptions);
 
-        $repeated[] = $mform->createElement('group', 'answeroptions',
-                $label, $answeroptions, null, false);
+        $previewgroup[] = $mform->createElement('html', '<canvas id="sketcher_preview" name="test_preview"></canvas>');
+
+        $answeroptions[] = $mform->createElement('group', 'previewgroup',
+                get_string('formtest', 'qtype_molsimilarity'), $previewgroup, null, false);
+
+        $repeated[] = $mform->createElement('group', 'answeroptions', $label, $answeroptions, null, false);
 
         $fromketcher = 'classo = set-molfile';
         $toketcher = 'classo = load-molfile';
@@ -146,6 +168,7 @@ class qtype_molsimilarity_edit_form extends qtype_shortanswer_edit_form {
         $repeatedoptions['answer']['type'] = PARAM_RAW;
         $repeatedoptions['fraction']['default'] = 1;
         $answersoption = 'answers';
+        $this->require_js_preview();
 
         return $repeated;
     }

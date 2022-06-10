@@ -115,6 +115,7 @@ class qtype_molsimilarity_renderer extends qtype_renderer {
         $this->page->requires->css("/question/type/molsimilarity/Chemdoodle/uis/jquery-ui-1.11.4.css");
         $this->page->requires->js("/question/type/molsimilarity/utils.js");
         $this->page->requires->js("/question/type/molsimilarity/Chemdoodle/ChemDoodleWeb-simple.js", true);
+        $this->page->requires->js("/question/type/molsimilarity/javascript/jquery-1.11.3.min.js", true);
         $this->page->requires->js("/question/type/molsimilarity/Chemdoodle/uis/ChemDoodleWeb-uis-simple.js",
                 true);
         parent::head_code($qa);
@@ -192,11 +193,11 @@ class qtype_molsimilarity_renderer extends qtype_renderer {
             return '';
         }
         $correctdata = json_decode($answer->answer)->{"json"};
-        $this->require_js_correct($toreplaceid, $inputname, $correctdata);
+        $this->require_js_correct($toreplaceid, $correctdata);
         return get_string('correctansweris', 'qtype_molsimilarity') . html_writer::tag('canvas', "", array('id' => $toreplaceid));
     }
 
-    protected function require_js_correct($toreplaceid, $inputname, $correctdata) {
+    protected function require_js_correct($toreplaceid, $correctdata) {
         global $CFG;
 
         $jsmodule = array(
