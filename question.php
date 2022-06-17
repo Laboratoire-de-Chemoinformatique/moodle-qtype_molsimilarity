@@ -286,18 +286,19 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
             : get_config('qtype_molsimilarity', 'isidaurl').'/isida');
         $option = array();
         $postdatas = null;
+        $jsonanswer = new stdClass();
+        $jsonanswer->answer = $answer;
         if ($dispatchermode) {
             $jsondata = json_decode($jsondatastring);
             $jsondata->is_sync = $issync;
             $jsondatastring = json_encode($jsondata);
-            if($issync)
             $postdatas = array(
                 'userid' => $userid,
                 'rightanswers' => json_encode($rightanswers),
                 'questionattemptid' => $qaid,
-                'answer' => $answer,
+                'answer' => json_encode($jsonanswer),
                 'uuid' => get_config('qtype_similartext', 'moodleid'),
-                'qtype' => 'qtype_similartext',
+                'qtype' => 'qtype_molsimilarity',
                 'token' => get_config('qtype_molsimilarity', 'moodlewstoken'),
                 'extrainfos' => $jsondatastring
             );
@@ -347,7 +348,6 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
             $rightanswers[] = $rightanswer->answer;
         }
         list($correction, $token, $jsonified) = $this->prepare_isida_json($answer);
-        $extrainfos['is_sync'] = false;
         list($result,$errno, $httpcode) =
             self::call_api($answer, $correction, $jsonified, $token,get_config('qtype_molsimilarity', 'jwtenabled'),
                 false, $userid, $qaid);
