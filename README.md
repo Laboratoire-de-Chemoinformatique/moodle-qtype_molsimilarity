@@ -39,4 +39,5 @@ Alexandre Varnek varnek@unistra.fr
 
 ## Licence
 
-GNU GPL v3 or later, IUPAC/InChI-Trust Licence No.1.0
+GNU GPL v3 or later
+The Inchi library used by this work is licenced under the IUPAC/InChI-Trust Licence No.1.0
