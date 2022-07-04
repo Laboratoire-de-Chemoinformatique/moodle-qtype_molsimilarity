@@ -178,19 +178,23 @@ M.qtype_molsimilarity={
                 let val = JSON.parse(box.val());
                 let data = ChemDoodle.readJSON(val.json);
                 window[id].loadMolecule(data['molecules'][0]);
+            } else {
+                window[id].clear();
             }
             let boxval = box.val();
 
             // Loop each 5s and update the preview if the answer was modified.
             setInterval(function () {
-                if (box.val()){
                     if (boxval !== box.val() ) {
                         boxval = box.val();
-                        let val = JSON.parse(box.val());
-                        let data = ChemDoodle.readJSON(val.json);
-                        window[id].loadMolecule(data['molecules'][0]);
+                        if (boxval === "") {
+                            window[id].clear();
+                        } else {
+                            let val = JSON.parse(box.val());
+                            let data = ChemDoodle.readJSON(val.json);
+                            window[id].loadMolecule(data['molecules'][0]);
+                        }
                     }
-                }
             }, 5000)
         }
     },

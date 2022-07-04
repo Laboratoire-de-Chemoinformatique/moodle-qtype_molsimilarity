@@ -14,6 +14,7 @@ The method of fragmentation used to create the ISIDA descriptors can be changed 
 
 
 Under Linux please use rest_api_multi, under Windows, please use rest_api_multi.exe
+Make sure that both the rest_api_multi and the inchi-1 executable are in rwx rights.
 
 The default port used by the server is 9080. Once installed, the ISIDA Server Url (including port) can be modified in the admin settings page for the call from moodle (Administration of the website -> Plugins -> Question type -> Molsimilarity -> ISIDA Server Url.).
 
@@ -39,4 +40,5 @@ Alexandre Varnek varnek@unistra.fr
 
 ## Licence
 
-GNU GPL v3 or later, IUPAC/InChI-Trust Licence No.1.0
+GNU GPL v3 or later
+The Inchi library used by this work is licenced under the IUPAC/InChI-Trust Licence No.1.0
