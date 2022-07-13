@@ -70,7 +70,7 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
         $recip = get_admins();
         foreach ($recip as $admin) {
             $eventdata->userto = $admin;
-            $result = message_send($eventdata);
+            message_send($eventdata);
         }
     }
 
@@ -153,7 +153,7 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
     public function summarise_response(array $response) {
         if (isset($response['answer'])) {
             $decoded = json_decode($response['answer']);
-            return $decoded->{"mol_file"};
+            return property_exists($decoded, 'mol_file') ? $decoded->mol_file : null;
         } else {
             return null;
         }
@@ -257,7 +257,7 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
         // Once the API answers, strip the JSON to get the grade. TODO Check the error num and send it to admin.
         $grade = false;
         if(get_config('qtype_molsimilarity', 'dispatchermode')){
-            $grade = json_decode($apiresponse, true)['score'];
+            $grade = json_decode($apiresponse, true)['outcomes']['score'];
         } else {
             if (!isset(json_decode($apiresponse, true)['student']['grade'])) {
                 return false;
@@ -319,7 +319,7 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
             // If there is an error, we send a Moodle notif to the admins to reboot the api server.
             self::notify_error( $curl, get_string('mailsubj', 'qtype_molsimilarity'),
                 get_string('mailmsg', 'qtype_molsimilarity', $curl));
-        } else if ($curl->get_info()['http_code'] != 201) {
+        } else if (($dispatchermode && $curl->get_info()['http_code'] != 201) || (!$dispatchermode && $curl->get_info()['http_code'] != 200)) {
             self::notify_error( $curl, get_string('mailsubj_security', 'qtype_molsimilarity'),
                 get_string('mailmsg_security', 'qtype_molsimilarity',
                     $result));
@@ -356,7 +356,7 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
         } else if($httpcode === 404) {
             return array(false, 404, "url not found");
         }
-        return array($result, null, null);
+        return array($result, null, null, null);
     }
 
     public function is_async_gradable_response(array $submitteddatas) {
@@ -380,7 +380,7 @@ class qtype_molsimilarity_question extends question_graded_automatically impleme
      * @return array
      * @throws dml_exception
      */
-    private function prepare_isida_json($response): array {
+    private function prepare_isida_json($response) {
         $singlearray['student'] = array("mol" => $response);
         $i = 1;
         $correction = [];

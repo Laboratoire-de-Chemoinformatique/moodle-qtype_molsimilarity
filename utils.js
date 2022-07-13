@@ -29,6 +29,7 @@ function ajax_call (molfile, json_data, location_isida, dirroot) {
         processData: false,
         data: JSON.stringify([{
             methodname: 'qtype_molsimilarity_modify_molfile',
+            index: 0,
             args: {
                 molfile: molfile,
                 json_data: json_data,
