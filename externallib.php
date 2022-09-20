@@ -64,7 +64,7 @@ class qtype_molsimilarity_external extends external_api
     }
 
     public static function modify_molfile($molfile, $jsondata, $sesskey) {
-        $params = self::validate_parameters(self::modify_molfile_parameters(),
+        self::validate_parameters(self::modify_molfile_parameters(),
                     array('molfile' => $molfile, 'json_data' => $jsondata, 'sesskey' => $sesskey));
 
         // We look for the number of lone pairs and radicals in the initial json.
@@ -134,8 +134,8 @@ class qtype_molsimilarity_external extends external_api
                 $endradline = '';
                 foreach ($radicals as $key => $value) {
                     $numatom = $key + 1;
-                    $endradline .= sprintf("% 3d", $numatom);
-                    $endradline .= sprintf("% 3d", 2);
+                    $endradline .= sprintf("% 4d", $numatom);
+                    $endradline .= sprintf("% 4d", 2);
                     $nbradicals ++;
                 }
                 $radline .= sprintf("% 3d", $nbradicals);

@@ -8,13 +8,13 @@ Both lone pairs and radicals are taken into account. Additionally, if the option
 
 ## Installation
 
-You can move the location of the Api_server directory, but you shoudn't move the individual elements inside it (inchi-1/inchi-1.exe, rest_api_multi, t0t3l2u4FCUR.xml and the temp_stock subdirectory need to be in the same directory).
+You can move the location of the Api_server directory, but you shoudn't move the individual elements inside it (inchi-1/inchi-1.exe, rest_api_multi/rest_api_multi.exe, t0t3l2u4FCUR.xml and the temp_stock subdirectory need to be in the same directory).
 
-The method of fragmentation used to create the ISIDA descriptors can be changed by modifying the file Api_server/t0t3l2u4FCUR.xml. The documentation about ISIDA descriptors can be found in the subdirectory Api_server.
+The method of fragmentation used to create the ISIDA descriptors can be changed by modifying the file Api_server/t0t3l2u4FCUR.xml. The documentation about ISIDA descriptors can be found in the subdirectory Api_server/Doc.
 
 
 Under Linux please use rest_api_multi, under Windows, please use rest_api_multi.exe
-Make sure that both the rest_api_multi and the inchi-1 executable are in rwx rights.
+Make sure that both the rest_api_multi, and the inchi-1 executable are in rwx rights.
 
 The default port used by the server is 9080. Once installed, the ISIDA Server Url (including port) can be modified in the admin settings page for the call from moodle (Administration of the website -> Plugins -> Question type -> Molsimilarity -> ISIDA Server Url.).
 
@@ -27,7 +27,8 @@ If you wish to launch the given server in local, without modifying the parameter
 
 ## API code
 
-If you wish to have access to the uncompiled files of the API, please send an email to Gilles Marcou: g.marcou@unistra.fr
+The uncompiled files of the API server are available in the Ai_server/Doc subdirectory in the "rest_api_multi.zip" file.
+If you have any question regarding the API server, please email Gilles Marcou: g.marcou@unistra.fr
 
 
 ## Copyright
@@ -42,3 +43,4 @@ Alexandre Varnek varnek@unistra.fr
 
 GNU GPL v3 or later
 The Inchi library used by this work is licenced under the IUPAC/InChI-Trust Licence No.1.0
+The rest_api_multi is under GNU GPL v3 or later

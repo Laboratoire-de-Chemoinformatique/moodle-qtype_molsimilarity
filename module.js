@@ -91,7 +91,7 @@ M.qtype_molsimilarity={
             }});
     },
     // Insert in the form
-    insert_form : function (Y, dirroot, sesskey) {
+    insert_form : function (Y, dirroot) {
             ChemDoodle.ELEMENT['H'].jmolColor = 'black';
             ChemDoodle.ELEMENT['S'].jmolColor = '#B9A130';
             let sketcher = new ChemDoodle.SketcherCanvas('sketcher', 550, 300, {useServices:false, oneMolecule:true});

@@ -41,7 +41,7 @@ class qtype_molsimilarity_test_connection extends  admin_setting_heading {
      */
     public function output_html($data, $query = '') {
         try {
-            $isserverup = test_api_server();
+            $isserverup = qtype_molsimilarity_test_api_server();
         } catch (Exception $e) {
             return html_writer::div(get_string('errorintestwhilegconnection', 'qtype_molsimilarity').
                     '<br>'.get_string('testerrorcode', 'qtype_molsimilarity', $e->getCode()).'<br>'.

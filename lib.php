@@ -48,7 +48,7 @@ function qtype_molsimilarity_pluginfile($course, $cm, $context, $filearea, $args
     question_pluginfile($course, $context, 'qtype_molsimilarity', $filearea, $args, $forcedownload, $options);
 }
 
-function test_api_server() {
+function qtype_molsimilarity_test_api_server() {
     $isidaurl = get_config('qtype_molsimilarity', 'isidaurl');
     $curl = new curl();
     $response = $curl->post($isidaurl . "/time");
