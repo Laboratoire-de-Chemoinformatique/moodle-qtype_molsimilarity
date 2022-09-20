@@ -20,32 +20,29 @@ The default port used by the server is 9080. Once installed, the ISIDA Server Ur
 
 If modified, the port must be modified on the server side as well, by assigning the port value to the variable portIsida in a shell or by the use of the option '--Port='.
 
-For security reasons, the plugin uses JSON Web Tokens (JWT) to securize the transaction between the API and Moodle. Therefore, if you don't use the API server in local, you are highly encouraged to modify the key used to encode the signature of the JWT. 
-
-It can be modified in the Administrator plugin parameters. Administration of the website -> Plugins -> Question type -> Molsimilarity -> ISIDA Server KEY. 
-
-In order for the request to the server to be accepted, the key on server side must be identical, and must be modified in Api_server/JWTKEY.txt. 
-If you wish to use JWT, you need to use the option '--JWTNEEDED' while launching the application.
+For security reasons, the plugin uses JSON Web Tokens (JWT) to securize the transaction between the API and Moodle. Therefore, if you don't use the API server in local, you are highly encouraged to modify the key used to encode the signature of the JWT.  
+It can be modified in the Administrator plugin parameters. Administration of the website -> Plugins -> Question type -> Molsimilarity -> ISIDA Server KEY.  
+In order for the request to the server to be accepted, the key on server side must be identical, and must be modified in Api_server/JWTKEY.txt. If you wish to use JWT, you need to use the option '--JWTNEEDED' while launching the application.
 
 If you wish to launch the given server in local, without modifying the parameters, please use the following command in a shell: ./rest_api_multi > /dev/null (/dev/null to remove the warnings)
 
 
 ## API code
 
-The uncompiled files of the API server are available in the Ai_server/Doc subdirectory in the "rest_api_multi.zip" file.
+The uncompiled files of the API server are available in the Ai_server/Doc subdirectory in the "rest_api_multi.zip" file.  
 If you have any question regarding the API server, please email Gilles Marcou: g.marcou@unistra.fr
 
 
-## Authors
+## Copyright
 
-- Louis Plyer louis.plyer@unistra.fr
-- Gilles Marcou g.marcou@unistra.fr
-- Céline Perves cperves@unistra.fr
-- Rachel Schurhammer rschurhammer@unistra.fr
-- Alexandre Varnek varnek@unistra.fr
+* Louis Plyer louis.plyer@unistra.fr
+* Gilles Marcou g.marcou@unistra.fr
+* Céline Perves cperves@unistra.fr
+* Rachel Schurhammer rschurhammer@unistra.fr
+* Alexandre Varnek varnek@unistra.fr
 
 ## Licence
 
-GNU GPL v3 or later
-The Inchi library used by this work is licenced under the IUPAC/InChI-Trust Licence No.1.0
+GNU GPL v3 or later  
+The Inchi library used by this work is licenced under the IUPAC/InChI-Trust Licence No.1.0  
 The rest_api_multi is under GNU GPL v3 or later
