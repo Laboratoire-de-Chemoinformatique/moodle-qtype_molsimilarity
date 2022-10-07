@@ -324,4 +324,24 @@ class qtype_molsimilarity_question extends question_graded_automatically {
                 return $result;
         }
     }
+
+    /** Override checkaccess to take answerfeedback into account
+     * @param $qa
+     * @param $options
+     * @param $component
+     * @param $filearea
+     * @param $args
+     * @param $forcedownload
+     * @return bool
+     */
+    public function check_file_access($qa, $options, $component, $filearea, $args, $forcedownload) {
+        if ($component == 'question' && in_array($filearea, array('correctfeedback',
+                'partiallycorrectfeedback', 'incorrectfeedback', 'answerfeedback'))) {
+            return $this->check_combined_feedback_file_access($qa, $options, $filearea, $args);
+        } else if ($component == 'question' && $filearea == 'hint') {
+            return $this->check_hint_file_access($qa, $options, $args);
+        } else {
+            return parent::check_file_access($qa, $options, $component, $filearea, $args, $forcedownload);
+        }
+    }
 }
