@@ -335,9 +335,8 @@ class qtype_molsimilarity_question extends question_graded_automatically {
      * @return bool
      */
     public function check_file_access($qa, $options, $component, $filearea, $args, $forcedownload) {
-        if (($component == 'question' && $filearea == 'answer') ||
-            ($component == 'question' && $filearea == 'answerfeedback')) {
-            $options->answerfeedback && $args[0] == $this->id;
+        if ($component == 'question' && $filearea == 'answerfeedback') {
+            return $qa->get_question()->answers[$args[0]]->feedback && $args[0] == $this->id;
         } else {
             return parent::check_file_access($qa, $options, $component, $filearea, $args, $forcedownload);
         }
