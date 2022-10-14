@@ -274,20 +274,25 @@ class qtype_molsimilarity_question extends question_graded_automatically {
                 'httpheader' => array("Authorization: Bearer " . $token)
         );
         $result = $curl->post($isidaurl . "/isida", $jsondata, $option);
-        if ($curl->error) {
+        if ($curl->error || json_decode($result, true) == null ) {
 
             // If the server is not responding, we send a Moodle notification to the admins to reboot the api server.
             $eventdata = new \core\message\message();
             $eventdata->component = 'qtype_molsimilarity';
             $eventdata->name = 'molsimilarity_down';
             $eventdata->userfrom = core_user::get_noreply_user();
-            $eventdata->subject = get_string('mailsubj', 'qtype_molsimilarity');
             $eventdata->fullmessageformat = FORMAT_HTML;
             $eventdata->notification = '1';
             $eventdata->contexturl = $CFG->wwwroot;
             $eventdata->contexturlname = $SITE->fullname;
             $eventdata->replyto = core_user::get_noreply_user()->email;
-            $eventdata->fullmessage = get_string('mailmsg', 'qtype_molsimilarity', $curl);
+            if ($curl->error) {
+                $eventdata->subject = get_string('mailsubj', 'qtype_molsimilarity');
+                $eventdata->fullmessage = get_string('mailmsg', 'qtype_molsimilarity', $curl);
+            } else {
+                $eventdata->subject = get_string('mailsubj_isidaerror', 'qtype_molsimilarity');
+                $eventdata->fullmessage = get_string('mailmsg_isidaerror', 'qtype_molsimilarity', $result);
+            }
             $eventdata->courseid = SITEID;
             $eventdata->fullmessagehtml = str_replace('\n', '<br/>', $eventdata->fullmessage);
 
