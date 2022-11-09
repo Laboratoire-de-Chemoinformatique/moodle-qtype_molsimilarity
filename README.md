@@ -18,13 +18,13 @@ Make sure that both the rest_api_multi, and the inchi-1 executable are in rwx ri
 
 The default port used by the server is 9080. Once installed, the ISIDA Server Url (including port) can be modified in the admin settings page for the call from moodle (Administration of the website -> Plugins -> Question type -> Molsimilarity -> ISIDA Server Url.).
 
-If modified, the port must be modified on the server side as well, by assigning the port value to the variable portIsida in a shell or by the use of the option '--Port='.
+If modified, the port must be modified on the server side as well, by the use of the option '--Port='.
 
 For security reasons, the plugin uses JSON Web Tokens (JWT) to securize the transaction between the API and Moodle. Therefore, if you don't use the API server in local, you are highly encouraged to modify the key used to encode the signature of the JWT.  
 It can be modified in the Administrator plugin parameters. Administration of the website -> Plugins -> Question type -> Molsimilarity -> ISIDA Server KEY.  
 In order for the request to the server to be accepted, the key on server side must be identical, and must be modified in Api_server/JWTKEY.txt. If you wish to use JWT, you need to use the option '--JWTNEEDED' while launching the application.
 
-If you wish to launch the given server in local, without modifying the parameters, please use the following command in a shell: ./rest_api_multi > /dev/null (/dev/null to remove the warnings)
+If you wish to launch the given server in local, without modifying the parameters, please use the following command in a shell, while in the Api_server directory: ./rest_api_multi > /dev/null (/dev/null to remove the warnings)
 
 
 ## API code
