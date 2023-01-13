@@ -41,9 +41,24 @@ require_once($CFG->dirroot . '/question/type/molsimilarity/question.php');
  * Rachel Schurhammer <rschurhammer@unistra.fr>, Gilles Marcou <g.marcou@unistra.fr>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_molsimilarity_question_test extends advanced_testcase {
+class question_test extends advanced_testcase {
+
+    protected function setUp(): void {
+        $this->resetAfterTest();
+        parent::setUp();
+        $this->set_isida_url();
+    }
+
+    private function set_isida_url(): void {
+        global $CFG;
+        $configtestfile = $CFG->dirroot . '/question/type/molsimilarity/config-test.php';
+        if( file_exists($configtestfile)) {
+            require($configtestfile);
+        }
+    }
 
     public function test_get_expected_data() {
+
         $question = test_question_maker::make_question('molsimilarity', 'ethanollp');
         $this->assertEquals(array('answer' => PARAM_RAW), $question->get_expected_data());
     }
@@ -94,17 +109,16 @@ class qtype_molsimilarity_question_test extends advanced_testcase {
     public function test_get_validation_error() {
         $question = test_question_maker::make_question('molsimilarity', 'ethanollp');
         $this->assertEquals(get_string('pleaseenterananswer', 'qtype_molsimilarity'),
-                $question->get_validation_error(array()));
+            $question->get_validation_error(array()));
         $this->assertNotEquals(get_string('pleaseenterananswer', 'qtype_molsimilarity'),
-                $question->get_validation_error(array('answer' => '{}')));
+            $question->get_validation_error(array('answer' => '{}')));
     }
 
     public function test_compute_final_grade() {
         $sa = test_question_maker::make_question('molsimilarity', 'ethanollp');
         $sa->start_attempt(new question_attempt_step(), 1); // Needed ?
-
         $this->assertEquals(array(1, question_state::graded_state_for_fraction(1)),
-                $sa->grade_response($sa->get_correct_response()));
+            $sa->grade_response($sa->get_correct_response()));
         $nulmol = '{"json":"{\"m\":[{\"a\":[]}]}","mol_file":"Molecule from ChemDoodle Web Components\n';
         $nulmol .= '\nhttp://www.ichemlabs.com\n  0  0  0  0  0  0            999 V2000\nM  END"}';
         $molnolp = '{"json":"{\"m\":[{\"a\":[{\"x\":260.75,\"y\":169,\"i\":\"a0\",\"l\":\"O\"},';
@@ -114,19 +128,18 @@ class qtype_molsimilarity_question_test extends advanced_testcase {
         $molnolp .= '   -0.2500    0.0000 O   0  0  0  0  0  0\n    0.0000    0.2500    0.0000 C   0  0  0  0  0  0\n';
         $molnolp .= '    0.8660   -0.2500    0.0000 C   0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\nM  END"}';
         $this->assertEquals(array(0, question_state::graded_state_for_fraction(0)),
-                $sa->grade_response(array('answer' => $nulmol)));
+            $sa->grade_response(array('answer' => $nulmol)));
         $this->assertNotEquals(array(1, question_state::graded_state_for_fraction(1)),
-                $sa->grade_response(array('answer' => $nulmol)));
+            $sa->grade_response(array('answer' => $nulmol)));
         $this->assertNotEquals(array(0, question_state::graded_state_for_fraction(0)),
-                $sa->grade_response(array('answer' => $molnolp)));
+            $sa->grade_response(array('answer' => $molnolp)));
         $this->assertNotEquals(array(1, question_state::graded_state_for_fraction(1)),
-                $sa->grade_response(array('answer' => $molnolp)));
+            $sa->grade_response(array('answer' => $molnolp)));
     }
 
     public function test_compute_final_grade_stereo() {
         $sa = test_question_maker::make_question('molsimilarity', 's1aminoethanol');
         $sa->start_attempt(new question_attempt_step(), 1);
-
         $nulmol = '{"json":"{\"m\":[{\"a\":[]}]}","mol_file":"Molecule from ChemDoodle Web Components\n';
         $nulmol .= '\nhttp://www.ichemlabs.com\n  0  0  0  0  0  0            999 V2000\nM  END"}';
 
@@ -141,10 +154,10 @@ class qtype_molsimilarity_question_test extends advanced_testcase {
         $r1aminoethanol .= ' O   0  0  0  0  0  0\n    0.9330   -0.2500    0.0000 H   0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  ';
         $r1aminoethanol .= '2  3  1  6  0  0  0\n  2  4  1  0  0  0  0\n  2  5  1  1  0  0  0\nM  END"}';
         $this->assertEquals(array(1, question_state::graded_state_for_fraction(1)),
-                $sa->grade_response($sa->get_correct_response()));
+            $sa->grade_response($sa->get_correct_response()));
         $this->assertEquals(array(0, question_state::graded_state_for_fraction(0)),
-                $sa->grade_response(array('answer' => $r1aminoethanol)));
+            $sa->grade_response(array('answer' => $r1aminoethanol)));
         $this->assertEquals(array(0, question_state::graded_state_for_fraction(0)),
-                $sa->grade_response(array('answer' => $nulmol)));
+            $sa->grade_response(array('answer' => $nulmol)));
     }
 }

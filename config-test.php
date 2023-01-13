@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
- * Contains the helper class for the molsimilarity question type tests.
- *
+ * config unit test file
  * @package qtype
  * @subpackage  molsimilarity
- * @copyright  2021 unistra  {@link http://unistra.fr}
+ * @copyright  2023 unistra  {@link http://unistra.fr}
  * @author Louis Plyer <louis.plyer@unistra.fr>, Céline Pervès <cperves@unistra.fr>, Alexandre Varnek <varnek@unistra.fr>,
  * Rachel Schurhammer <rschurhammer@unistra.fr>, Gilles Marcou <g.marcou@unistra.fr>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
+set_config('isidaurl', 'localhost:9081', 'qtype_molsimilarity');

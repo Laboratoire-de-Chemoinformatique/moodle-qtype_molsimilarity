@@ -41,7 +41,7 @@ require_once($CFG->dirroot . '/question/engine/tests/helpers.php');
  * Rachel Schurhammer <rschurhammer@unistra.fr>, Gilles Marcou <g.marcou@unistra.fr>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class qtype_molsimilarity_test extends advanced_testcase {
+class questiontype_test extends advanced_testcase {
     public static $includecoverage = array(
             'question/type/questiontypebase.php',
             'question/type/molsimilarity/questiontype.php',
@@ -49,11 +49,11 @@ class qtype_molsimilarity_test extends advanced_testcase {
 
     protected $qtype;
 
-    protected function setUp() {
+    protected function setUp() :void {
         $this->qtype = new qtype_molsimilarity();
     }
 
-    protected function tearDown() {
+    protected function tearDown() : void {
         $this->qtype = null;
     }
 
