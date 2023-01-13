@@ -141,7 +141,7 @@ class qtype_molsimilarity_edit_form extends qtype_shortanswer_edit_form {
         $answeroptions[] = $mform->createElement('textarea', 'answer',
                 $label, array('row' => 1, 'style' => 'display: none;'));
         $answeroptions[] = $mform->createElement('select', 'fraction',
-                get_string('grade'), $gradeoptions);
+                get_string('gradenoun'), $gradeoptions);
 
         $previewgroup[] = $mform->createElement('html', '<canvas id="sketcher_preview" name="test_preview"></canvas>');
 
