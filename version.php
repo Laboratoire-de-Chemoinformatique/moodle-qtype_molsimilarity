@@ -28,8 +28,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'qtype_molsimilarity';
-$plugin->version   = 2022111700;
+$plugin->version   = 2023010800;
 $plugin->requires  = 2020060900;
 
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release = '1.2.2';
+$plugin->release = '1.2.3';

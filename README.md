@@ -44,5 +44,7 @@ If you have any question regarding the API server, please email Gilles Marcou: g
 ## Licence
 
 GNU GPL v3 or later  
-The Inchi library used by this work is licenced under the IUPAC/InChI-Trust Licence No.1.0  
-The rest_api_multi is under GNU GPL v3 or later
+The Inchi library used by this work is licenced under the GNU GPL V3 or later, as authorized in the 3rd article of the IUPAC/InChI-Trust Licence No.1.0 "You may opt to apply the terms of the ordinary GNU General Public Licence instead of this Licence
+to a given copy of the Library".    
+The rest_api_multi is under GNU GPL v3 or later.
+
