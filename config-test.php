@@ -23,4 +23,4 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
-set_config('isidaurl', 'localhost:9081', 'qtype_molsimilarity');
+set_config('isidaurl', 'localhost:9090', 'qtype_molsimilarity');

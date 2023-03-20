@@ -41,7 +41,7 @@ require_once($CFG->dirroot . '/question/type/molsimilarity/question.php');
  * Rachel Schurhammer <rschurhammer@unistra.fr>, Gilles Marcou <g.marcou@unistra.fr>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class question_test extends advanced_testcase {
+class qtype_molsimilarity_question_test extends advanced_testcase {
 
     protected function setUp(): void {
         $this->resetAfterTest();
