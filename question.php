@@ -122,7 +122,7 @@ class qtype_molsimilarity_question extends question_graded_automatically {
      */
     public function summarise_response(array $response) {
         if (isset($response['answer'])) {
-            $decoded = json_decode($response['answer']);
+            $decoded = json_decode($response['answer'] ?? '');
             return $decoded->{"mol_file"};
         } else {
             return null;
@@ -154,7 +154,7 @@ class qtype_molsimilarity_question extends question_graded_automatically {
      */
 
     public function grade_response(array $response) {
-        $decodedresponse = json_decode($response['answer']);
+        $decodedresponse = json_decode($response['answer'] ?? '');
         if ($decodedresponse) {
             $grade = $this->compare_mol($decodedresponse->{"mol_file"});
             if ($grade === false) { // F compare_answer returns false if the server is down => question_state sets to needsgrading.
@@ -223,7 +223,7 @@ class qtype_molsimilarity_question extends question_graded_automatically {
         $i = 1;
         $correction = [];
         foreach ($this->answers as $answer) {
-            $correction["mol_". $i] = json_decode($answer->answer)->{"mol_file"};
+            $correction["mol_". $i] = json_decode($answer->answer ?? '')->{"mol_file"};
             $i++;
         }
         $singlearray['correction'] = $correction;
@@ -247,10 +247,10 @@ class qtype_molsimilarity_question extends question_graded_automatically {
         $apiresponse = $this->call_api($jsonified, $token);
 
         // Once the API answers, strip the JSON to get the grade. TODO Check the error num and send it to admin.
-        if (!isset(json_decode($apiresponse, true)['student']['grade'])) {
+        if (!isset(json_decode($apiresponse ?? '', true)['student']['grade'])) {
             return false;
         } else {
-            $grade = json_decode($apiresponse, true)['student']['grade'];
+            $grade = json_decode($apiresponse ?? '', true)['student']['grade'];
             if (gettype($grade) == "integer" || "double") {
                 return $grade;
             } else {
@@ -274,7 +274,7 @@ class qtype_molsimilarity_question extends question_graded_automatically {
                 'httpheader' => array("Authorization: Bearer " . $token)
         );
         $result = $curl->post($isidaurl . "/isida", $jsondata, $option);
-        if ($curl->error || json_decode($result, true) == null ) {
+        if ($curl->error || json_decode($result ?? '', true) == null ) {
 
             // If the server is not responding, we send a Moodle notification to the admins to reboot the api server.
             $eventdata = new \core\message\message();
@@ -294,7 +294,7 @@ class qtype_molsimilarity_question extends question_graded_automatically {
                 $eventdata->fullmessage = get_string('mailmsg_isidaerror', 'qtype_molsimilarity', $result);
             }
             $eventdata->courseid = SITEID;
-            $eventdata->fullmessagehtml = str_replace('\n', '<br/>', $eventdata->fullmessage);
+            $eventdata->fullmessagehtml = str_replace('\n', '<br/>', $eventdata->fullmessage ?? '');
 
             $recip = get_admins();
             foreach ($recip as $admin) {
@@ -302,7 +302,7 @@ class qtype_molsimilarity_question extends question_graded_automatically {
                 $result = message_send($eventdata);
             }
             return $curl->errno;
-        } else if (isset(json_decode($result, true)['success']) && (json_decode($result, true)['success']) == 'False') {
+        } else if (isset(json_decode($result ?? '', true)['success']) && (json_decode($result, true)['success']) == 'False') {
             // If there is an unauthorized attempt to access the REST server, we send a Moodle notification to the admins to reboot
             // the api server.
             $eventdata = new \core\message\message();
@@ -315,9 +315,9 @@ class qtype_molsimilarity_question extends question_graded_automatically {
             $eventdata->contexturl = $CFG->wwwroot;
             $eventdata->contexturlname = $SITE->fullname;
             $eventdata->replyto = core_user::get_noreply_user()->email;
-            $eventdata->fullmessage = get_string('mailmsg_security', 'qtype_molsimilarity', json_decode($result, true)['reason']);
+            $eventdata->fullmessage = get_string('mailmsg_security', 'qtype_molsimilarity', json_decode($result ?? '', true)['reason']);
             $eventdata->courseid = SITEID;
-            $eventdata->fullmessagehtml = str_replace('\n', '<br/>', $eventdata->fullmessage);
+            $eventdata->fullmessagehtml = str_replace('\n', '<br/>', $eventdata->fullmessage ?? '');
 
             $recip = get_admins();
             foreach ($recip as $admin) {

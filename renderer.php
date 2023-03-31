@@ -77,7 +77,7 @@ class qtype_molsimilarity_renderer extends qtype_renderer {
             $inputinplace = html_writer::tag('label', get_string('answer'),
                     array('for' => $inputattributes['id'], 'class' => 'accesshide'));
             $inputinplace .= $input;
-            $questiontext = substr_replace($questiontext, $inputinplace,
+            $questiontext = substr_replace($questiontext ?? '', $inputinplace,
                     strpos($questiontext, $placeholder), strlen($placeholder));
         }
 
@@ -192,7 +192,7 @@ class qtype_molsimilarity_renderer extends qtype_renderer {
         if (!$answer) {
             return '';
         }
-        $correctdata = json_decode($answer->answer)->{"json"};
+        $correctdata = json_decode($answer->answer ?? '')->{"json"};
         $this->require_js_correct($toreplaceid, $correctdata);
         return get_string('correctansweris', 'qtype_molsimilarity') . html_writer::tag('canvas', "", array('id' => $toreplaceid));
     }
