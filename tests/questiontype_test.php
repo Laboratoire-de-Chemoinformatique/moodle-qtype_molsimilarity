@@ -24,6 +24,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace qtype_molsimilarity;
+use advanced_testcase;
+use qtype_molsimilarity;
+use test_question_maker;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
