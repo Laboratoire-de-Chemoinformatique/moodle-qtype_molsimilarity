@@ -11,14 +11,21 @@
         <location>Api_server/inchi-1 ; Api_server/inchi-1.exe</location>
         <name>InChI version 1 executable</name>
         <version>1.06</version>
-        <license>IUPAC/InChI-Trust InChI Licence</license>
-    <licenseversion>1.0</licenseversion>
-</library>
+        <license>GNU GPL</license>
+    <licenseversion>3.0</licenseversion>
+    </library>
     <library>
         <location>Api_server/rest_api_multi ; Api_server/rest_api_multi.exe</location>
         <name>Correction Rest Server</name>
         <version>1.0</version>
         <license>GNU GPL LPGL</license>
         <licenseversion>3.0+</licenseversion>*
+    </library>
+    <library>
+        <location>javascript/jquery-1.11.3.min.js</location>
+        <name>jQuery</name>
+        <version>1.11.3</version>
+        <license>MIT license</license>
+        <licenseversion>/</licenseversion>*
     </library>
 </libraries>
