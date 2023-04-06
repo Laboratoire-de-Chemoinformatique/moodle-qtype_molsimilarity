@@ -69,7 +69,7 @@ class qtype_molsimilarity_external extends external_api
 
         // We look for the number of lone pairs and radicals in the initial json.
 
-        $decoded = json_decode($jsondata, true);
+        $decoded = json_decode($jsondata ?? '', true);
         $atominf = $decoded['m'][0]['a'];
         $lonepairs = self::molsimilarity_array_column_ext($atominf, 'p', -1);
         $radicals = self::molsimilarity_array_column_ext($atominf, 'r', -1);
