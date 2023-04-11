@@ -212,4 +212,19 @@ M.qtype_molsimilarity={
             window[name].loadMolecule(cmcmol['molecules'][0]);
         }
         },
+    insert_scaffold : function (Y, scaffold_data) {
+        let name = "sketcher_scaffold";
+        window[name] = new ChemDoodle.SketcherCanvas(name, 550, 300, {useServices:false, oneMolecule:true});
+
+        window[name].emptyMessage = 'No data loaded';
+        window[name].styles.atoms_useJMOLColors = true;
+        window[name].styles.bonds_clearOverlaps_2D = true;
+
+        let correct_mol = scaffold_data;
+
+        if (correct_mol.length > 0) {
+            let cmcmol = ChemDoodle.readJSON(correct_mol);
+            window[name].loadMolecule(cmcmol['molecules'][0]);
+        }
+    },
     };

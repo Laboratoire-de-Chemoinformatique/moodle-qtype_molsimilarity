@@ -11,6 +11,8 @@
         <FIELD NAME="stereobool" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether answers are corrected taking in account stereochemistry."/>
         <FIELD NAME="threshold" TYPE="number" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="5" COMMENT="Threshold under which the grade will be counted as being 0."/>
         <FIELD NAME="alpha" TYPE="number" LENGTH="10" NOTNULL="true" DEFAULT="1" SEQUENCE="false" DECIMALS="5" COMMENT="Parameter used to modify the notation."/>
+        <FIELD NAME="scaffold" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Parameter used to add a starting scaffold."/>
+
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

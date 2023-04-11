@@ -83,6 +83,12 @@ class qtype_molsimilarity_edit_form extends qtype_shortanswer_edit_form {
         $mform->addElement('select', 'stereobool',
                 get_string('stereoselection', 'qtype_molsimilarity'), $menustereo);
 
+        $mform->addElement('html', '<canvas id="sketcher_scaffold" style="padding-left: 0;padding-right: 0;margin-left: auto;
+                margin-right: auto;display: block;"></canvas>');
+        $mform->addElement('hidden', 'scaffold');
+        $this->require_js_scaffold();
+        $mform->addElement('html', html_writer::empty_tag('br'));
+
         $mform->addElement('static', 'answersinstruct',
                 get_string('correctanswers', 'qtype_molsimilarity'),
                 get_string('filloutoneanswer', 'qtype_molsimilarity'));
@@ -127,6 +133,21 @@ class qtype_molsimilarity_edit_form extends qtype_shortanswer_edit_form {
         );
         $PAGE->requires->js_init_call('M.qtype_molsimilarity.insert_form_preview',
                 null,
+                true,
+                $jsmodule);
+    }
+
+    protected function require_js_scaffold() {
+        global $PAGE, $CFG;
+        $jsmodule = array(
+                'name'     => 'qtype_molsimilarity',
+                'fullpath' => '/question/type/molsimilarity/module.js',
+                'requires' => array(),
+                'strings' => array()
+        );
+        $directory = json_encode(array("dirrMoodle" => $CFG->wwwroot), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $PAGE->requires->js_init_call('M.qtype_molsimilarity.insert_scaffold',
+                array($directory),
                 true,
                 $jsmodule);
     }
