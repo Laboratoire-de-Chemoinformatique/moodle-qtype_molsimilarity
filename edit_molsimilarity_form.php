@@ -83,11 +83,17 @@ class qtype_molsimilarity_edit_form extends qtype_shortanswer_edit_form {
         $mform->addElement('select', 'stereobool',
                 get_string('stereoselection', 'qtype_molsimilarity'), $menustereo);
 
+        $mform->addElement('static', 'scaffoldinstruct',
+                get_string('scaffoldselection', 'qtype_molsimilarity'));
+        $mform->addHelpButton('scaffoldinstruct', 'scaffoldselection', 'qtype_molsimilarity');
+
         $mform->addElement('html', '<canvas id="sketcher_scaffold" style="padding-left: 0;padding-right: 0;margin-left: auto;
                 margin-right: auto;display: block;"></canvas>');
         $mform->addElement('hidden', 'scaffold');
-        $this->require_js_scaffold();
+        $mform->setType('scaffold', PARAM_RAW);
         $mform->addElement('html', html_writer::empty_tag('br'));
+
+        $this->require_js_scaffold();
 
         $mform->addElement('static', 'answersinstruct',
                 get_string('correctanswers', 'qtype_molsimilarity'),

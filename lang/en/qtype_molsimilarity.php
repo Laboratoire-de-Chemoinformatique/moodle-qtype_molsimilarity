@@ -71,3 +71,5 @@ $string['threshold_help'] = "If the grade to the power of alpha is superior or e
 $string['alphaselection'] = "Please select a value of alpha value. It will be used to modify the grade accordingly.";
 $string['alphaselection_help'] = "If alpha is equal to 1, the score is not modified. If it's superior to 1, the notation is more severe. If it's inferior to 1, the notation is less severe.";
 $string['formtest'] = 'Preview answer: ';
+$string['scaffoldselection'] = "You can insert a scaffold for the student.";
+$string['scaffoldselection_help'] = "A scaffold will be inserted in the student's sketcher to help him.";

@@ -49,6 +49,7 @@ class qtype_molsimilarity_test_helper extends question_test_helper {
         $sa->stereobool = 0;
         $sa->threshold = 0;
         $sa->alpha = 1;
+        $sa->scaffold = '';
         $sa->generalfeedback = 'Generalfeedback: ethanol should not be confused with methanol.';
         $answer = '{"json":"{\"m\":[{\"a\":[{\"x\":230.17949168589269,\"y\":151.89999999999998,\"i\":\"a0\",\"l\":\"O\",\"p\":2},';
         $answer .= '{\"x\":247.49999976158148,\"y\":141.89999999999998,\"i\":\"a1\"},{\"x\":264.8205078372702,';
@@ -74,6 +75,7 @@ class qtype_molsimilarity_test_helper extends question_test_helper {
         $sa->stereobool = 1;
         $sa->threshold = 0;
         $sa->alpha = 1;
+        $sa->scaffold = '';
         $sa->generalfeedback = 'Generalfeedback: ethanol should not be confused with methanol.';
         $answer = '{"json":"{\"m\":[{\"a\":[{\"x\":221.75,\"y\":156,\"i\":\"a0\",\"l\":\"N\"},{\"x\":239.07050807568876,\"y\":146,';
         $answer .= '\"i\":\"a1\"},{\"x\":256.3910161513775,\"y\":156,\"i\":\"a2\"},{\"x\":239.07050807568876,\"y\":126,\"i\":\"a3';
@@ -126,6 +128,7 @@ class qtype_molsimilarity_test_helper extends question_test_helper {
         $form->stereobool = 1;
         $form->threshold = 0;
         $form->alpha = 1;
+        $form->scaffold = '';
         $answer = '{"json":"{\"m\":[{\"a\":[{\"x\":230.17949168589269,\"y\":151.89999999999998,\"i\":\"a0\",\"l\":\"O\",\"p\":2},';
         $answer .= '{\"x\":247.49999976158148,\"y\":141.89999999999998,\"i\":\"a1\"},{\"x\":264.8205078372702,';
         $answer .= '\"y\":151.9,\"i\":\"a2\"}],\"b\":[{\"b\":0,\"e\":1,\"i\":\"b0\"},{\"b\":1,\"e\":2,\"i\":\"b1\"}]}]}",';

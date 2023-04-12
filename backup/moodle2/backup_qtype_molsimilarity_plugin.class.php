@@ -60,7 +60,8 @@ class backup_qtype_molsimilarity_plugin extends backup_qtype_extrafields_plugin 
         $molsimilarity = new backup_nested_element('molsimilarity', array('id'), array(
                 'stereobool',
                 'threshold',
-                'alpha'));
+                'alpha',
+                'scaffold'));
 
         // Now the own qtype tree.
         $pluginwrapper->add_child($molsimilarity);

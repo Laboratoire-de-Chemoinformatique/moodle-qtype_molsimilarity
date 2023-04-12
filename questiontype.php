@@ -48,7 +48,7 @@ require_once($CFG->dirroot . '/question/type/molsimilarity/question.php');
 class qtype_molsimilarity extends question_type {
 
     public function extra_question_fields() {
-        return array('question_molsimilarity', 'stereobool', 'threshold', 'alpha');
+        return array('question_molsimilarity', 'stereobool', 'threshold', 'alpha', 'scaffold');
     }
     public function move_files($questionid, $oldcontextid, $newcontextid) {
         parent::move_files($questionid, $oldcontextid, $newcontextid);

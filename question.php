@@ -42,6 +42,7 @@ class qtype_molsimilarity_question extends question_graded_automatically {
     public $stereobool;
     public $alpha;
     public $threshold;
+    public $scaffold;
     public $answers = array();
 
     /**

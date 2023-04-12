@@ -97,7 +97,8 @@ class qtype_molsimilarity_renderer extends qtype_renderer {
                     array('class' => 'validationerror'));
         }
 
-        $this->require_js($toreplaceid, $options->readonly, $options->correctness, $inputname);
+        $scaffold = $question->scaffold ;
+        $this->require_js($toreplaceid, $options->readonly, $options->correctness, $inputname, $scaffold);
 
         return $result;
     }
@@ -121,7 +122,7 @@ class qtype_molsimilarity_renderer extends qtype_renderer {
         parent::head_code($qa);
     }
 
-    protected function require_js($toreplaceid, $readonly, $correctness, $inputname) {
+    protected function require_js($toreplaceid, $readonly, $correctness, $inputname, $scaffold) {
         global $CFG;
 
         $jsmodule = array(
@@ -139,7 +140,8 @@ class qtype_molsimilarity_renderer extends qtype_renderer {
                         $name,
                         str_replace(':', '_', $inputname),
                         $readonly,
-                        $directory),
+                        $directory,
+                        $scaffold),
                 true,
                 $jsmodule);
     }

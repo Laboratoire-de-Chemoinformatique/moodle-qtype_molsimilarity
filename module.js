@@ -26,7 +26,7 @@
 
 M.qtype_molsimilarity={
     // Insert for the renderer
-    insert_cwc : function(Y, toreplaceid, name, inputname, readonly, dirroot){
+    insert_cwc : function(Y, toreplaceid, name, inputname, readonly, dirroot, scaffold){
         let dirr = JSON.parse(dirroot).dirrMoodle;
         let location_isida = '#' + inputname;
 
@@ -80,6 +80,11 @@ M.qtype_molsimilarity={
         if(lastmol.length > 0) {
             let cmcmol = ChemDoodle.readJSON(JSON.parse(lastmol).json);
             window[name].loadMolecule(cmcmol['molecules'][0]);
+        }
+        else if (scaffold != '') {
+            let cmcmol = JSON.parse(scaffold);
+            let data = ChemDoodle.readJSON(cmcmol.json);
+            window[name].loadMolecule(data['molecules'][0]);
         }
         else { // Case ketcher not instantiated, we use the empty "mol".
             let initmol = ChemDoodle.readJSON("{\"m\":[{\"a\":[]}]}");
@@ -212,19 +217,34 @@ M.qtype_molsimilarity={
             window[name].loadMolecule(cmcmol['molecules'][0]);
         }
         },
-    insert_scaffold : function (Y, scaffold_data) {
+    insert_scaffold : function (Y, dirroot) {
         let name = "sketcher_scaffold";
+        let dirr = JSON.parse(dirroot).dirrMoodle;
+
         window[name] = new ChemDoodle.SketcherCanvas(name, 550, 300, {useServices:false, oneMolecule:true});
 
         window[name].emptyMessage = 'No data loaded';
         window[name].styles.atoms_useJMOLColors = true;
         window[name].styles.bonds_clearOverlaps_2D = true;
 
-        let correct_mol = scaffold_data;
+        let scaffoldarea = $("input[name=scaffold]");
+        let scaffoldData = scaffoldarea.val();
 
-        if (correct_mol.length > 0) {
-            let cmcmol = ChemDoodle.readJSON(correct_mol);
-            window[name].loadMolecule(cmcmol['molecules'][0]);
+        if (scaffoldData.length > 0) {
+            let cmcmol = JSON.parse(scaffoldData);
+            let data = ChemDoodle.readJSON(cmcmol.json);
+            window[name].loadMolecule(data['molecules'][0]);
         }
+
+        const moodleform = $("form[data-qtype=molsimilarity]");
+        moodleform[0].addEventListener("submit", function (event) {
+            let json_data = JSON.stringify(new ChemDoodle.io.JSONInterpreter().contentTo(window[name].molecules));
+            // We check if there is an answer, if not, we send an empty json, which can be loaded into the canvas.
+            if (json_data !== '{\"m\":[{\"a\":[]}]}') {
+                let mol = ChemDoodle.writeMOL(window[name].getMolecule());
+                ajax_call(mol, json_data, scaffoldarea, dirr);
+            }
+            return true;
+        });
     },
     };
