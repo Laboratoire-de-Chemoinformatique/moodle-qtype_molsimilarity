@@ -81,7 +81,7 @@ M.qtype_molsimilarity={
             let cmcmol = ChemDoodle.readJSON(JSON.parse(lastmol).json);
             window[name].loadMolecule(cmcmol['molecules'][0]);
         }
-        else if (scaffold != '') {
+        else if (scaffold !== '') {
             let cmcmol = JSON.parse(scaffold);
             let data = ChemDoodle.readJSON(cmcmol.json);
             window[name].loadMolecule(data['molecules'][0]);
@@ -242,7 +242,11 @@ M.qtype_molsimilarity={
             // We check if there is an answer, if not, we send an empty json, which can be loaded into the canvas.
             if (json_data !== '{\"m\":[{\"a\":[]}]}') {
                 let mol = ChemDoodle.writeMOL(window[name].getMolecule());
-                ajax_call(mol, json_data, scaffoldarea, dirr);
+                if (mol != 'Molecule from ChemDoodle Web Components\n\nhttp://www.ichemlabs.com\n  1  0  0  0  0  0            999 V2000\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0\nM  END') {
+                    ajax_call(mol, json_data, scaffoldarea, dirr);
+                } else {
+                    scaffoldarea.val('');
+                }
             }
             return true;
         });
