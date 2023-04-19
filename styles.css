@@ -14,3 +14,7 @@
 .que.molsimilarity label {
     display: inline-flex;
 }
+
+.que.molsimilarity #fitem_id_answersinstruct + div {
+    text-align: center;
+}
