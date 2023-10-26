@@ -239,6 +239,7 @@ class qtype_molsimilarity_question extends question_graded_automatically {
         $uniqueid = $attemptid . "-" . $this->id; // To have a unique id when we write a file in the API.
         $singlearray['attemptid'] = array("id" => $uniqueid);
 
+        $singlearray['scaffold'] = array("scaffold" => json_decode($this->scaffold ?? '')->{"mol_file"} ?? '');
         // Prepare a JWT using the private KEY.
         $token = self::generate($singlearray, get_config('qtype_molsimilarity', 'isidaKEY'));
         // Prepare the Json to be given to the API.
