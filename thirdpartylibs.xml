@@ -1,21 +1,35 @@
 <?xml version="1.0"?>
 <libraries>
     <library>
-        <location>ChemDoodle/</location>
+        <location>Chemdoodle/</location>
         <name>ChemDoodle</name>
         <version>9.1.0</version>
         <license>GNU GPL</license>
         <licenseversion>3.0</licenseversion>
     </library>
     <library>
-        <location>Api_server/inchi-1 ; Api_server/inchi-1.exe</location>
+        <location>Api_server/inchi-1</location>
         <name>InChI version 1 executable</name>
         <version>1.06</version>
         <license>GNU GPL</license>
     <licenseversion>3.0</licenseversion>
     </library>
     <library>
-        <location>Api_server/rest_api_multi ; Api_server/rest_api_multi.exe</location>
+        <location>Api_server/inchi-1.exe</location>
+        <name>InChI version 1 executable</name>
+        <version>1.06</version>
+        <license>GNU GPL</license>
+        <licenseversion>3.0</licenseversion>
+    </library>
+    <library>
+        <location>Api_server/rest_api_multi</location>
+        <name>Correction Rest Server</name>
+        <version>1.0</version>
+        <license>GNU GPL LPGL</license>
+        <licenseversion>3.0+</licenseversion>*
+    </library>
+    <library>
+        <location>Api_server/rest_api_multi.exe</location>
         <name>Correction Rest Server</name>
         <version>1.0</version>
         <license>GNU GPL LPGL</license>
