@@ -78,7 +78,19 @@ function xmldb_qtype_molsimilarity_upgrade($oldversion = 0) {
             $dbman->add_field($table, $field);
         }
         upgrade_plugin_savepoint(true, 2023041100, 'qtype', 'molsimilarity');
+    }
+    // FIX scaffold not existing trouble.
+    if ($oldversion < 2023102600) {
+        $table = new xmldb_table('question_molsimilarity');
 
+        // Add scaffold parameter.
+        $field = new xmldb_field('scaffold', XMLDB_TYPE_TEXT);
+
+        // Conditionally launch add field id.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_plugin_savepoint(true, 2023110800, 'qtype', 'molsimilarity');
     }
 
     return true;
