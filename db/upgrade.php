@@ -90,7 +90,7 @@ function xmldb_qtype_molsimilarity_upgrade($oldversion = 0) {
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-        upgrade_plugin_savepoint(true, 2023110800, 'qtype', 'molsimilarity');
+        upgrade_plugin_savepoint(true, 2023102600, 'qtype', 'molsimilarity');
     }
 
     return true;
