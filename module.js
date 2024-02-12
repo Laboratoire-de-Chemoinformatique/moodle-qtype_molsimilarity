@@ -81,7 +81,7 @@ M.qtype_molsimilarity={
             let cmcmol = ChemDoodle.readJSON(JSON.parse(lastmol).json);
             window[name].loadMolecule(cmcmol['molecules'][0]);
         }
-        else if (scaffold !== '') {
+        else if (scaffold !== '' && scaffold) {
             let cmcmol = JSON.parse(scaffold);
             let data = ChemDoodle.readJSON(cmcmol.json);
             window[name].loadMolecule(data['molecules'][0]);
