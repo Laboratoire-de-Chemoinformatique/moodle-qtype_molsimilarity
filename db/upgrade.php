@@ -92,6 +92,13 @@ function xmldb_qtype_molsimilarity_upgrade($oldversion = 0) {
         }
         upgrade_plugin_savepoint(true, 2023102600, 'qtype', 'molsimilarity');
     }
-
+    if ($oldversion < 2024110400) {
+        $isidaurl = get_config('qtype_molsimilarity', 'isidaurl');
+        if( !preg_match('/\/isida$/', $isidaurl)) {
+            $isidaurl.= '/isida';
+        }
+        set_config('isidaurl', $isidaurl, 'qtype_molsimilarity');
+        upgrade_plugin_savepoint(true, 2024110400, 'qtype', 'molsimilarity');
+    }
     return true;
 }

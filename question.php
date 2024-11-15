@@ -271,11 +271,18 @@ class qtype_molsimilarity_question extends question_graded_automatically {
         global $SITE, $CFG;
         $curl = new curl();
         $isidaurl = get_config('qtype_molsimilarity', 'isidaurl');
-        $option = array(
-                'returntransfer' => true,
-                'httpheader' => array("Authorization: Bearer " . $token)
-        );
-        $result = $curl->post($isidaurl . "/isida", $jsondata, $option);
+        $headers = [
+            "Authorization: Bearer " . $token
+        ];
+        if (!empty($CFG->xdebug)) {
+            $headers[] = "Cookie: XDEBUG_SESSION=PHPSTORM";
+        }
+        $curl->setHeader($headers);
+        $curl->setopt([
+            'CURLOPT_RETURNTRANSFER' => true,
+            'CURLOPT_CUSTOMREQUEST' => "POST",
+        ]);
+        $result = $curl->post($isidaurl, $jsondata);
         if ($curl->error || json_decode($result ?? '', true) == null ) {
 
             // If the server is not responding, we send a Moodle notification to the admins to reboot the api server.

@@ -49,7 +49,7 @@ if ($hassiteconfig) {
             new admin_setting_configtext('qtype_molsimilarity/isidaurl',
                     get_string('isidaurl', 'qtype_molsimilarity'),
                     get_string('isidaurl_desc', 'qtype_molsimilarity'),
-                    'localhost:9080')
+                    'localhost:9080/isida')
     );
     $settings->add(
             new admin_setting_configtext('qtype_molsimilarity/isidaKEY',
