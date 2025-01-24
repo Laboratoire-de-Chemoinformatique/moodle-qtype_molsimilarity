@@ -30,14 +30,14 @@ $messageproviders = array(
     // Notify that the molsimilarity correction server is down.
         'molsimilarity_down' => array(
                 'defaults' => array(
-                        'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
-                        'email' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF
+                        'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_ENABLED ,
+                        'email' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_ENABLED ,
                 )
         ),
         'molsimilarity_security' => array(
                 'defaults' => array(
-                        'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
-                        'email' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF
+                        'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_ENABLED,
+                        'email' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_ENABLED,
                 )
         ),
 );
