@@ -7,7 +7,20 @@ Both lone pairs and radicals are taken into account. Additionally, if the option
 
 
 ## Installation
-
+### with Docker
+* isida server version are available in github at https://github.com/cperves/docker-isida/
+* Pull docker image
+```shell
+# docker logout to access to anonymous access
+docker pull ghcr.io/cperves/isida:version_number
+```
+  * put version number to last available version number
+* run it
+```shell
+docker container run --publish 9080:9080 --detach ghcr.io/cperves/isida:version_number
+# server will run on 9080 port but you can change it to another port --publish newport:9080
+``` 
+### Manually
 You can move the location of the Api_server directory, but you shoudn't move the individual elements inside it (inchi-1/inchi-1.exe, rest_api_multi/rest_api_multi.exe, t0t3l2u4FCUR.xml and the temp_stock subdirectory need to be in the same directory).
 
 The method of fragmentation used to create the ISIDA descriptors can be changed by modifying the file Api_server/t0t3l2u4FCUR.xml. The documentation about ISIDA descriptors can be found in the subdirectory Api_server/Doc.
