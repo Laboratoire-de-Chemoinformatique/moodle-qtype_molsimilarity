@@ -22,4 +22,4 @@
  * Rachel Schurhammer <rschurhammer@unistra.fr>, Gilles Marcou <g.marcou@unistra.fr>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-set_config('isidaurl', 'localhost:9080', 'qtype_molsimilarity');
+set_config('isidaurl', 'isida:9080', 'qtype_molsimilarity');

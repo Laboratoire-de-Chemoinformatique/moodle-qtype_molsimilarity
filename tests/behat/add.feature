@@ -1,4 +1,4 @@
-@qtype @qtype_molsimilarity
+@javascript @qtype @qtype_molsimilarity
 Feature: Test creating a molsimilarity question
   As a teacher
   In order to test my students
@@ -14,17 +14,23 @@ Feature: Test creating a molsimilarity question
     And the following "course enrolments" exist:
       | user     | course | role           |
       | teacher1 | C1     | editingteacher |
-    And I log in as "teacher1"
-    And I am on "Course 1" course homepage
-    And I navigate to "Question bank" in current page administration
 
-  Scenario: Create a Short answer question
-    When I add a "Molsimilarity" question filling the form with:
+
+  Scenario: Create a molsimilarity question
+    When I am on the "Course 1" "core_question > course question bank" page logged in as "teacher1"
+    #And I change window size to "2560x8192"
+    And I change viewport size to "1400x1000"
+    And I press "Create a new question ..."
+    And I set the field "item_qtype_molsimilarity" to "1"
+    And I press "submitbutton"
+    #Then I should see "Adding an Molsimilarity question"
+    And I set the following fields to these values:
       | Question name        | molsimilarity-001                         |
       | Question text        | Draw a molecule of Methane  |
       | General feedback     | Simple as that |
       | Default mark         | 1                                         |
-      | id_answer_0          | {"json":"{\"m\":[{\"a\":[{\"x\":255.75,\"y\":141,\"i\":\"a0\"}]}]}","mol_file":"Molecule from ChemDoodle Web Components\n\nhttp://www.ichemlabs.com\n  1  0  0  0  0  0            999 V2000\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0\nM  END"} |
       | id_fraction_0        | 100%                                      |
       | id_feedback_0        | Well done.             |
+    And I fill molsimilarity answer field "id_answer_0" with carbon
+    And I press "id_submitbutton"
     Then I should see "molsimilarity-001"

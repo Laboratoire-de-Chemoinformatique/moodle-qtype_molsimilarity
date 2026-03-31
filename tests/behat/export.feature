@@ -1,4 +1,4 @@
-@qtype @qtype_molsimilarity
+@javascript @qtype @qtype_molsimilarity
 Feature: Test exporting Molsimilarity questions
   As a teacher
   In order to be able to reuse my Molsimilarity questions
@@ -25,6 +25,7 @@ Feature: Test exporting Molsimilarity questions
 
   Scenario: Export a Molsimilarity question
     When I navigate to "Question bank" in current page administration
+    And I click on "System shared question bank" "link"
     And I select "Export" from the "jump" singleselect
     And I set the field "id_format_xml" to "1"
     And I press "Export questions to file"

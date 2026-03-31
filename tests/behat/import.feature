@@ -1,4 +1,4 @@
-@qtype @qtype_molsimilarity
+@javascript @qtype @qtype_molsimilarity
 Feature: Test importing Molsimilarity questions
   As a teacher
   In order to reuse Molsimilarity questions
@@ -20,6 +20,8 @@ Feature: Test importing Molsimilarity questions
   @javascript @_file_upload
   Scenario: import Matching question.
     When I navigate to "Question bank" in current page administration
+    And I click on "Create default question bank" "button"
+    And I click on "Course 1 course question bank" "link"
     And I select "Import" from the "jump" singleselect
     And I set the field "id_format_xml" to "1"
     And I upload "question/type/molsimilarity/tests/fixtures/testquestion.moodle.xml" file to "Import" filemanager

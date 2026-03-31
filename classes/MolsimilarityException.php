@@ -26,7 +26,7 @@
  */
 
 class MolsimilarityException extends Exception {
-    public function __construct($response, $code = 0, Exception $previous = null) {
+    public function __construct($response, $code = 0, ?Exception $previous = null) {
         $message = $response->error;
         $code = $response->errno;
         parent::__construct($message, $code, $previous);

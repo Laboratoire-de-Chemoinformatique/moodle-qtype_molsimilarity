@@ -165,8 +165,9 @@ class qtype_molsimilarity_edit_form extends qtype_shortanswer_edit_form {
         $previewgroup = array();
         $insertchamp = array();
 
-        $answeroptions[] = $mform->createElement('textarea', 'answer',
-                $label, array('row' => 1, 'style' => 'display: none;'));
+        #$answeroptions[] = $mform->createElement('textarea', 'answer',$label, array('row' => 1, 'style' => 'display: none;'));
+
+        $answeroptions[] = $mform->createElement('hidden', 'answer', ""); //array('row' => 1, 'style' => 'display: none;'));
         $answeroptions[] = $mform->createElement('select', 'fraction',
                 get_string('gradenoun'), $gradeoptions);
 
