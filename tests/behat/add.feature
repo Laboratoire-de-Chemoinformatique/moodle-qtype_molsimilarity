@@ -18,12 +18,10 @@ Feature: Test creating a molsimilarity question
 
   Scenario: Create a molsimilarity question
     When I am on the "Course 1" "core_question > course question bank" page logged in as "teacher1"
-    #And I change window size to "2560x8192"
     And I change viewport size to "1400x1000"
     And I press "Create a new question ..."
     And I set the field "item_qtype_molsimilarity" to "1"
     And I press "submitbutton"
-    #Then I should see "Adding an Molsimilarity question"
     And I set the following fields to these values:
       | Question name        | molsimilarity-001                         |
       | Question text        | Draw a molecule of Methane  |
