@@ -5,6 +5,13 @@ The similarity between the expected, and the student's answer is computed throug
 
 Both lone pairs and radicals are taken into account. Additionally, if the option is selected, and the two molecules to compare are similar, the stereochemistry will be also taken into account in the grading process, thanks to the use of the INCHI.
 
+## Moodle patch
+Before Moodle 5.0 version, while reviewing a molsimilarity question javascript are not loaded.
+Please apply the patch to moodle core  with the given patch provided in patch subdirectory
+```shell
+patch -p1 /www_moodle_path/mod/quiz/reviewquestion.php < /www_moodle_path/moodle2_uds/question/type/molsimilarity/patch/mod_quiz_reviewquestion.patch
+```
+see https://moodle.atlassian.net/browse/MDL-83392 for fuether information
 
 ## Installation
 ### with Docker

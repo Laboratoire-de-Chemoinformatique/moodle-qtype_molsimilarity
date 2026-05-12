@@ -1,0 +1,14 @@
+--- /datas/dev/moodle/moodle_gitworkspaces/moodle405/moodle2_version_org/mod/quiz/reviewquestion.php	2026-04-16 04:57:09.000000000 +0200
++++ /datas/dev/moodle/moodle_gitworkspaces/moodle405/moodle2_version/mod/quiz/reviewquestion.php	2026-04-27 13:47:29.710251169 +0200
+@@ -110,6 +110,10 @@
+ if ($timestamp) {
+     $summary->add_item('timestamp', get_string('completedon', 'quiz'), userdate($timestamp));
+ }
+-
++// UNISTRA DEV MDL-83392.
++$originalslot = $attemptobj->get_original_slot($slot);
++$page = $attemptobj->get_question_page($originalslot);
++$attemptobj->get_html_head_contributions($page);
++// End UNISTRA DEV MDL-83392.
+ echo $output->review_question_page($attemptobj, $slot, $seq,
+         $attemptobj->get_display_options(true), $summary);
